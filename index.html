@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Drikkeleker</title>
 
   <style>
@@ -16,9 +15,11 @@
       --muted: #a3a3a3;
       --orange: #ff7a1a;
       --orangeSoft: rgba(255, 122, 26, 0.14);
-      --red: #ef4444;
       --green: #22c55e;
-      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --greenSoft: rgba(34, 197, 94, 0.14);
+      --red: #ef4444;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
     }
 
     * {
@@ -27,21 +28,24 @@
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      font-family: var(--font);
       background:
-        radial-gradient(circle at top, rgba(255,122,26,0.12), transparent 35%),
+        radial-gradient(circle at top, rgba(255, 122, 26, 0.12), transparent 35%),
         linear-gradient(180deg, #050505, #0c0c0d 45%, #050505);
       color: var(--text);
       min-height: 100vh;
     }
 
-    button, input, textarea, select {
-      font-family: inherit;
+    button,
+    input,
+    textarea,
+    select {
+      font-family: var(--font);
     }
 
     .page {
       width: 100%;
-      max-width: 940px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 26px 16px 52px;
     }
@@ -55,6 +59,7 @@
       font-size: clamp(46px, 11vw, 82px);
       letter-spacing: -0.07em;
       line-height: 0.92;
+      font-weight: 950;
     }
 
     .highlight {
@@ -67,6 +72,7 @@
       color: var(--muted);
       font-size: clamp(17px, 4vw, 21px);
       line-height: 1.45;
+      font-weight: 500;
     }
 
     .screen {
@@ -91,7 +97,7 @@
     }
 
     .panel {
-      background: rgba(22,22,22,0.94);
+      background: rgba(22, 22, 22, 0.94);
       border: 1px solid var(--border);
       border-radius: 26px;
       padding: 22px;
@@ -103,11 +109,23 @@
       margin: 0 0 10px;
       font-size: 28px;
       letter-spacing: -0.04em;
+      font-weight: 950;
     }
 
+    .subtitle,
     .muted {
       color: var(--muted);
       line-height: 1.5;
+      font-size: 15px;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .home-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
     }
 
     .buttons {
@@ -124,7 +142,8 @@
       font-weight: 900;
       font-size: 15px;
       cursor: pointer;
-      transition: transform 0.15s ease, opacity 0.15s ease;
+      transition: transform 0.15s ease, opacity 0.15s ease, border-color 0.15s ease;
+      text-align: center;
     }
 
     .btn:active {
@@ -142,16 +161,55 @@
       border: 1px solid var(--border);
     }
 
+    .btn-secondary:hover {
+      border-color: rgba(255, 122, 26, 0.55);
+    }
+
     .btn-danger {
-      background: rgba(239,68,68,0.14);
+      background: rgba(239, 68, 68, 0.14);
       color: #fecaca;
-      border: 1px solid rgba(239,68,68,0.35);
+      border: 1px solid rgba(239, 68, 68, 0.35);
     }
 
     .btn-green {
-      background: rgba(34,197,94,0.16);
+      background: rgba(34, 197, 94, 0.16);
       color: #bbf7d0;
-      border: 1px solid rgba(34,197,94,0.35);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+    }
+
+    .choice-card {
+      width: 100%;
+      background:
+        linear-gradient(135deg, rgba(255, 122, 26, 0.08), transparent 42%),
+        var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 22px;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .choice-card:hover {
+      border-color: rgba(255, 122, 26, 0.65);
+      background:
+        linear-gradient(135deg, rgba(255, 122, 26, 0.14), transparent 42%),
+        var(--card2);
+    }
+
+    .choice-card h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+      font-weight: 950;
+    }
+
+    .choice-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-weight: 500;
     }
 
     .topbar {
@@ -177,7 +235,9 @@
       color: var(--text);
     }
 
-    input, textarea, select {
+    input,
+    textarea,
+    select {
       width: 100%;
       background: #0b0b0c;
       color: var(--text);
@@ -186,6 +246,7 @@
       padding: 14px;
       font-size: 16px;
       outline: none;
+      font-weight: 500;
     }
 
     textarea {
@@ -193,7 +254,9 @@
       resize: vertical;
     }
 
-    input:focus, textarea:focus, select:focus {
+    input:focus,
+    textarea:focus,
+    select:focus {
       border-color: var(--orange);
       box-shadow: 0 0 0 4px var(--orangeSoft);
     }
@@ -213,6 +276,22 @@
       font-size: 14px;
     }
 
+    .winner-message {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      color: #bbf7d0;
+      background: var(--greenSoft);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      font-weight: 950;
+      line-height: 1.35;
+    }
+
+    .winner-message.active {
+      display: block;
+    }
+
     .mode-badge {
       display: inline-flex;
       align-items: center;
@@ -220,7 +299,7 @@
       padding: 8px 12px;
       border-radius: 999px;
       background: var(--orangeSoft);
-      border: 1px solid rgba(255,122,26,0.3);
+      border: 1px solid rgba(255, 122, 26, 0.3);
       color: var(--orange);
       font-weight: 900;
       margin-top: 10px;
@@ -236,7 +315,7 @@
       padding: 12px 18px;
       border-radius: 18px;
       background: var(--orangeSoft);
-      border: 1px solid rgba(255,122,26,0.3);
+      border: 1px solid rgba(255, 122, 26, 0.3);
       color: var(--orange);
       font-size: 34px;
       font-weight: 950;
@@ -297,8 +376,53 @@
       display: grid;
       place-items: center;
       background: var(--orangeSoft);
-      border: 1px solid rgba(255,122,26,0.35);
+      border: 1px solid rgba(255, 122, 26, 0.35);
       font-size: 20px;
+      flex: 0 0 auto;
+    }
+
+    .online-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .online-player {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #101010;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    .online-player:hover {
+      border-color: rgba(255, 122, 26, 0.55);
+      background: #191919;
+    }
+
+    .online-person {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      min-width: 0;
+    }
+
+    .online-person-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .online-status {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .games-list {
@@ -312,7 +436,7 @@
       width: 100%;
       text-align: left;
       background:
-        linear-gradient(135deg, rgba(255,122,26,0.08), transparent 38%),
+        linear-gradient(135deg, rgba(255, 122, 26, 0.08), transparent 38%),
         var(--card);
       border: 1px solid var(--border);
       border-radius: 22px;
@@ -323,9 +447,9 @@
     }
 
     .game-card:hover {
-      border-color: rgba(255,122,26,0.65);
+      border-color: rgba(255, 122, 26, 0.65);
       background:
-        linear-gradient(135deg, rgba(255,122,26,0.14), transparent 40%),
+        linear-gradient(135deg, rgba(255, 122, 26, 0.14), transparent 40%),
         var(--card2);
     }
 
@@ -342,12 +466,14 @@
       margin: 0 0 8px;
       font-size: 23px;
       letter-spacing: -0.03em;
+      font-weight: 950;
     }
 
     .game-card p {
       margin: 0;
       color: var(--muted);
       line-height: 1.45;
+      font-weight: 500;
     }
 
     .play-layout {
@@ -363,9 +489,9 @@
 
     .round-card {
       background:
-        radial-gradient(circle at top left, rgba(255,122,26,0.18), transparent 34%),
+        radial-gradient(circle at top left, rgba(255, 122, 26, 0.18), transparent 34%),
         #101010;
-      border: 1px solid rgba(255,122,26,0.25);
+      border: 1px solid rgba(255, 122, 26, 0.25);
       border-radius: 28px;
       min-height: 270px;
       padding: 28px 22px;
@@ -394,7 +520,7 @@
       white-space: nowrap;
       color: var(--orange);
       background: var(--orangeSoft);
-      border: 1px solid rgba(255,122,26,0.28);
+      border: 1px solid rgba(255, 122, 26, 0.28);
       border-radius: 999px;
       padding: 6px 10px;
       font-size: 13px;
@@ -431,8 +557,13 @@
       color: var(--orange);
     }
 
+    .vote-button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
     .scoreboard {
-      background: rgba(22,22,22,0.94);
+      background: rgba(22, 22, 22, 0.94);
       border: 1px solid var(--border);
       border-radius: 26px;
       padding: 18px;
@@ -448,6 +579,7 @@
       margin: 0 0 12px;
       font-size: 22px;
       letter-spacing: -0.03em;
+      font-weight: 950;
     }
 
     .score-row {
@@ -489,6 +621,7 @@
       margin-top: 5px;
       color: var(--muted);
       font-size: 12px;
+      font-weight: 500;
     }
 
     .score-buttons {
@@ -510,24 +643,17 @@
 
     .plus {
       color: #bbf7d0 !important;
-      border-color: rgba(34,197,94,0.35) !important;
-      background: rgba(34,197,94,0.12) !important;
+      border-color: rgba(34, 197, 94, 0.35) !important;
+      background: rgba(34, 197, 94, 0.12) !important;
     }
 
     .minus {
       color: #fecaca !important;
-      border-color: rgba(239,68,68,0.35) !important;
-      background: rgba(239,68,68,0.12) !important;
+      border-color: rgba(239, 68, 68, 0.35) !important;
+      background: rgba(239, 68, 68, 0.12) !important;
     }
 
-    .custom-item {
-      background: #101010;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 14px;
-      margin-top: 10px;
-    }
-
+    .custom-item,
     .last-game {
       background: #101010;
       border: 1px solid var(--border);
@@ -548,6 +674,10 @@
       }
 
       .input-row {
+        grid-template-columns: 1fr;
+      }
+
+      .home-actions {
         grid-template-columns: 1fr;
       }
 
@@ -640,21 +770,65 @@
       </p>
     </header>
 
-    <section id="homeScreen" class="screen active">
+    <section id="profileScreen" class="screen">
+      <div class="panel">
+        <h2 class="title">Velg brukernavn</h2>
+        <p class="subtitle">Skriv inn navnet ditt før du starter eller blir med i spill.</p>
+        <div class="avatar-grid" id="profileAvatarGrid"></div>
+        <div class="input-row">
+          <input id="profileNameInput" placeholder="Ditt brukernavn" />
+          <button class="btn btn-primary" onclick="saveProfile()">Fortsett</button>
+        </div>
+        <div class="message" id="profileMessage"></div>
+      </div>
+    </section>
+
+    <section id="homeScreen" class="screen">
       <div class="panel">
         <h2 class="title">Start</h2>
-        <p class="muted">Velg om én person styrer spillet, eller om alle spiller fra hver sin telefon.</p>
+        <p class="subtitle">Start et spill eller bli med i et spill med kode.</p>
+
+        <div class="home-actions">
+          <button class="btn btn-primary" onclick="showScreen('createGameScreen')">Start nytt spill</button>
+          <button class="btn btn-secondary" onclick="showScreen('joinScreen')">Bli med i spill</button>
+        </div>
 
         <div class="buttons">
-          <button class="btn btn-primary" onclick="startGameMasterMode()">Spillmaster</button>
-          <button class="btn btn-secondary" onclick="createNewRoom()">Flerspiller</button>
-          <button class="btn btn-secondary" onclick="showScreen('joinScreen')">Bli med i spill</button>
           <button class="btn btn-secondary" onclick="showScreen('customGamesScreen')">Opprett egen lek</button>
           <button class="btn btn-secondary" onclick="showScreen('myGamesScreen')">Mine leker</button>
           <button class="btn btn-secondary" onclick="showScreen('lastGamesScreen'); renderLastGames();">Siste spill</button>
         </div>
 
         <div class="message" id="homeMessage"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="title">Andre spillere</h2>
+        <p class="subtitle">Trykk på en spiller for å invitere til din lobby eller bli med i deres lobby.</p>
+        <div class="online-list" id="onlinePlayersList"></div>
+      </div>
+    </section>
+
+    <section id="createGameScreen" class="screen">
+      <div class="topbar">
+        <button class="back" onclick="goHome()">← Tilbake</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="title">Opprett nytt spill</h2>
+        <p class="subtitle">Velg spillmodus.</p>
+
+        <div class="buttons">
+          <button class="choice-card" onclick="startGameMasterMode()">
+            <h3>Spillmaster</h3>
+            <p>Du er gamemaster. Ingen andre bruker telefon.</p>
+          </button>
+
+          <button class="choice-card" onclick="createNewRoom()">
+            <h3>Flerspiller</h3>
+            <p>Alle blir med i spillet på sin egen telefon.</p>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -665,12 +839,9 @@
 
       <div class="panel">
         <h2 class="title">Bli med i spill</h2>
-        <p class="muted">Skriv inn 4-sifret kode.</p>
-
+        <p class="subtitle">Skriv inn 4-sifret kode.</p>
         <input id="joinCodeInput" inputmode="numeric" maxlength="4" placeholder="F.eks. 4821" />
-
         <button class="btn btn-primary" style="margin-top:12px;" onclick="joinRoomByCode()">Fortsett</button>
-
         <div class="message" id="joinMessage"></div>
       </div>
     </section>
@@ -688,13 +859,12 @@
         <div id="roomCodePanel">
           <h3>Spillkode</h3>
           <div class="code-box" id="roomCodeBox">----</div>
-          <p class="muted">Del koden med de andre spillerne.</p>
+          <p class="subtitle">Del koden med de andre spillerne.</p>
         </div>
       </div>
 
       <div class="panel">
         <h2 class="title">Spillere</h2>
-
         <div class="avatar-grid" id="avatarGrid"></div>
 
         <div class="input-row">
@@ -703,7 +873,6 @@
         </div>
 
         <div class="message" id="playerMessage"></div>
-
         <div class="players" id="playersList"></div>
       </div>
 
@@ -721,7 +890,7 @@
 
       <div class="panel">
         <h2 class="title" id="currentGameTitle">Lek</h2>
-        <p class="muted" id="currentGameDesc"></p>
+        <p class="subtitle" id="currentGameDesc"></p>
       </div>
 
       <div id="playLayout" class="play-layout">
@@ -733,7 +902,7 @@
             </div>
 
             <div class="round-text" id="roundText"></div>
-
+            <div id="winnerMessage" class="winner-message"></div>
             <div class="vote-area" id="voteArea"></div>
           </div>
 
@@ -746,6 +915,7 @@
         <aside id="scoreboard" class="scoreboard">
           <h3>Scoreboard</h3>
           <div id="scoreList"></div>
+
           <div class="buttons">
             <button class="btn btn-secondary" onclick="undoLastSavedGameScore()">Fjern score fra sist spilte lek</button>
             <button class="btn btn-danger" onclick="resetAllTotalScores()">Slett totalscore</button>
@@ -761,7 +931,6 @@
 
       <div class="panel">
         <h2 class="title">Opprett egen lek</h2>
-
         <input id="customGameName" placeholder="Navn på lek" style="margin-top:10px;" />
         <textarea id="customGameDescription" placeholder="Kort beskrivelse" style="margin-top:10px;"></textarea>
 
@@ -807,7 +976,7 @@
 
       <div class="panel">
         <h2 class="title">Siste spill</h2>
-        <p class="muted">Her lagres maks 10 siste fullførte spill lokalt i nettleseren.</p>
+        <p class="subtitle">Her lagres maks 10 siste fullførte spill lokalt i nettleseren.</p>
         <div id="lastGamesList"></div>
       </div>
     </section>
@@ -822,7 +991,8 @@
       set,
       update,
       remove,
-      onValue
+      onValue,
+      onDisconnect
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
 
     const firebaseConfig = {
@@ -839,7 +1009,9 @@
     const db = getDatabase(app);
 
     const screens = [
+      "profileScreen",
       "homeScreen",
+      "createGameScreen",
       "joinScreen",
       "lobbyScreen",
       "playScreen",
@@ -849,8 +1021,10 @@
     ];
 
     const hero = document.getElementById("hero");
+
     const avatars = ["😎", "🤠", "🤡", "🦊", "🐸", "🐵", "👽", "🤖", "🧠", "🔥"];
-    let selectedAvatar = "😎";
+
+    let selectedAvatar = localStorage.getItem("profileAvatar") || "😎";
 
     let ownerId = localStorage.getItem("ownerId");
     if (!ownerId) {
@@ -864,12 +1038,16 @@
       localStorage.setItem("playerId", playerId);
     }
 
-    let currentMode = null; // "master" eller "multi"
+    let profileName = localStorage.getItem("profileName") || "";
+    let profileAvatar = localStorage.getItem("profileAvatar") || "😎";
+
+    let currentMode = null;
     let currentRoomCode = null;
     let currentRoom = null;
     let customDraftQuestions = [];
     let customGames = {};
     let roomUnsubscribe = null;
+    let onlineUnsubscribe = null;
 
     const homeMessage = document.getElementById("homeMessage");
     const joinMessage = document.getElementById("joinMessage");
@@ -880,8 +1058,12 @@
     const modeBadge = document.getElementById("modeBadge");
     const lobbyTitle = document.getElementById("lobbyTitle");
     const avatarGrid = document.getElementById("avatarGrid");
+    const profileAvatarGrid = document.getElementById("profileAvatarGrid");
+    const profileNameInput = document.getElementById("profileNameInput");
+    const profileMessage = document.getElementById("profileMessage");
     const playerNameInput = document.getElementById("playerNameInput");
     const playersList = document.getElementById("playersList");
+    const onlinePlayersList = document.getElementById("onlinePlayersList");
     const gamesList = document.getElementById("gamesList");
     const hostGameSelect = document.getElementById("hostGameSelect");
     const playLayout = document.getElementById("playLayout");
@@ -893,6 +1075,7 @@
     const roundText = document.getElementById("roundText");
     const voteArea = document.getElementById("voteArea");
     const hostControls = document.getElementById("hostControls");
+    const winnerMessage = document.getElementById("winnerMessage");
     const myGamesList = document.getElementById("myGamesList");
 
     const defaultGames = {
@@ -902,17 +1085,17 @@
         description: "Alle stemmer på spilleren som passer best.",
         scoring: true,
         questions: [
-          { type: "votePlayer", text: "Hvem i rommet hadde overlevd lengst uten mobilen sin?" },
-          { type: "votePlayer", text: "Hvem er mest sannsynlig til å svare 'kommer snart' mens de fortsatt er hjemme?" },
-          { type: "votePlayer", text: "Hvem hadde klart seg best på en realityserie?" },
-          { type: "votePlayer", text: "Hvem bruker mest penger på takeaway?" },
-          { type: "votePlayer", text: "Hvem hadde blitt best sjef?" },
-          { type: "votePlayer", text: "Hvem er mest sannsynlig til å bli rik på en rar idé?" },
-          { type: "votePlayer", text: "Hvem hadde klart seg dårligst på telttur?" },
-          { type: "votePlayer", text: "Hvem har alltid lavest batteri?" },
-          { type: "votePlayer", text: "Hvem blir mest dramatisk over små problemer?" },
-          { type: "votePlayer", text: "Hvem har best stories fra byen?" }
-        ]
+          "Hvem i rommet hadde overlevd lengst uten mobilen sin?",
+          "Hvem er mest sannsynlig til å svare 'kommer snart' mens de fortsatt er hjemme?",
+          "Hvem hadde klart seg best på en realityserie?",
+          "Hvem bruker mest penger på takeaway?",
+          "Hvem hadde blitt best sjef?",
+          "Hvem er mest sannsynlig til å bli rik på en rar idé?",
+          "Hvem hadde klart seg dårligst på telttur?",
+          "Hvem har alltid lavest batteri?",
+          "Hvem blir mest dramatisk over små problemer?",
+          "Hvem har best stories fra byen?"
+        ].map(text => ({ type: "votePlayer", text }))
       },
       cards: {
         id: "cards",
@@ -920,17 +1103,14 @@
         description: "Trekk regler, oppgaver og kaoskort.",
         scoring: false,
         questions: [
-          { type: "card", text: "Lag en regel som gjelder de neste tre rundene." },
-          { type: "card", text: "Velg en spiller som må fortelle en fun fact." },
-          { type: "card", text: "Alle bytter plass. Sistemann taper runden." },
-          { type: "card", text: "Velg en kategori. Alle sier ett ord til noen stopper." },
-          { type: "card", text: "Alle må holde maska. Første som ler taper." },
-          { type: "card", text: "Forklar din siste brukte emoji." },
-          { type: "card", text: "Alle sjekker batteri. Lavest batteri taper." },
-          { type: "card", text: "Lag et kallenavn til spilleren til venstre." },
-          { type: "card", text: "Si din mest undervurderte mening." },
-          { type: "card", text: "To spillere har komplimentduell." }
-        ]
+          "Lag en regel som gjelder de neste tre rundene.",
+          "Velg en spiller som må fortelle en fun fact.",
+          "Alle bytter plass. Sistemann taper runden.",
+          "Velg en kategori. Alle sier ett ord til noen stopper.",
+          "Alle må holde maska. Første som ler taper.",
+          "Forklar din siste brukte emoji.",
+          "Alle sjekker batteri. Lavest batteri taper."
+        ].map(text => ({ type: "card", text }))
       },
       speed: {
         id: "speed",
@@ -938,17 +1118,12 @@
         description: "Svar raskest. Spillmaster gir poeng.",
         scoring: true,
         questions: [
-          { type: "speed", text: "Nevn tre strømmetjenester." },
-          { type: "speed", text: "Pek på noe oransje." },
-          { type: "speed", text: "Si tre ting man finner i et kollektiv." },
-          { type: "speed", text: "Nevn tre ting man gjør på en søndag." },
-          { type: "speed", text: "Finn noe som koster under 100 kroner." },
-          { type: "speed", text: "Si tre norske byer." },
-          { type: "speed", text: "Nevn tre ting du burde gjort tidligere i dag." },
-          { type: "speed", text: "Nevn tre typer kaffe." },
-          { type: "speed", text: "Finn noe svart." },
-          { type: "speed", text: "Si tre sosiale medier." }
-        ]
+          "Nevn tre strømmetjenester.",
+          "Pek på noe oransje.",
+          "Si tre ting man finner i et kollektiv.",
+          "Nevn tre ting man gjør på en søndag.",
+          "Finn noe som koster under 100 kroner."
+        ].map(text => ({ type: "speed", text }))
       },
       secret: {
         id: "secret",
@@ -956,17 +1131,12 @@
         description: "En spiller får et hemmelig oppdrag.",
         scoring: false,
         questions: [
-          { type: "secret", text: "Få noen til å gi deg en high-five." },
-          { type: "secret", text: "Få noen til å si ordet 'pizza'." },
-          { type: "secret", text: "Start en applaus uten å forklare hvorfor." },
-          { type: "secret", text: "Få noen til å spørre deg 'hvorfor?'." },
-          { type: "secret", text: "Bytt plass med noen uten å forklare grunnen." },
-          { type: "secret", text: "Få noen til å sjekke mobilen sin." },
-          { type: "secret", text: "Få noen til å gi deg et kompliment." },
-          { type: "secret", text: "Få noen til å foreslå en sang." },
-          { type: "secret", text: "Få noen til å nevne trening." },
-          { type: "secret", text: "Få noen til å si 'ok, fair'." }
-        ]
+          "Få noen til å gi deg en high-five.",
+          "Få noen til å si ordet 'pizza'.",
+          "Start en applaus uten å forklare hvorfor.",
+          "Få noen til å spørre deg 'hvorfor?'.",
+          "Bytt plass med noen uten å forklare grunnen."
+        ].map(text => ({ type: "secret", text }))
       },
       duel: {
         id: "duel",
@@ -974,43 +1144,49 @@
         description: "To spillere møtes i et dilemma. Alle stemmer.",
         scoring: true,
         questions: [
-          { type: "duel", text: "Ville du heller alltid komme ti minutter for sent eller én time for tidlig?" },
-          { type: "duel", text: "Ville du heller aldri bruke sosiale medier igjen eller aldri se film igjen?" },
-          { type: "duel", text: "Ville du heller ha gratis kaffe eller gratis taco resten av livet?" },
-          { type: "duel", text: "Ville du heller ha drømmejobben med dårlig lønn eller kjedelig jobb med veldig god lønn?" },
-          { type: "duel", text: "Ville du heller alltid si hva du tenker eller aldri kunne forklare deg?" },
-          { type: "duel", text: "Ville du heller være best i verden på karaoke eller quiz?" },
-          { type: "duel", text: "Ville du heller alltid ha lavt batteri eller dårlig WiFi?" },
-          { type: "duel", text: "Ville du heller ha ubegrenset klær eller ubegrenset reiser?" },
-          { type: "duel", text: "Ville du heller alltid få ærlige svar eller alltid vite når noen lyver?" },
-          { type: "duel", text: "Ville du heller vinne hver diskusjon eller alltid få siste ord?" }
-        ]
+          "Ville du heller alltid komme ti minutter for sent eller én time for tidlig?",
+          "Ville du heller aldri bruke sosiale medier igjen eller aldri se film igjen?",
+          "Ville du heller ha gratis kaffe eller gratis taco resten av livet?",
+          "Ville du heller ha drømmejobben med dårlig lønn eller kjedelig jobb med veldig god lønn?",
+          "Ville du heller alltid si hva du tenker eller aldri kunne forklare deg?"
+        ].map(text => ({ type: "duel", text }))
       }
     };
 
-    window.showScreen = showScreen;
-    window.goHome = goHome;
-    window.startGameMasterMode = startGameMasterMode;
-    window.createNewRoom = createNewRoom;
-    window.joinRoomByCode = joinRoomByCode;
-    window.joinAsPlayer = joinAsPlayer;
-    window.leaveRoom = leaveRoom;
-    window.selectGameForRoom = selectGameForRoom;
-    window.hostNextRound = hostNextRound;
-    window.vote = vote;
-    window.changeScore = changeScore;
-    window.finishGame = finishGame;
-    window.undoLastSavedGameScore = undoLastSavedGameScore;
-    window.resetAllTotalScores = resetAllTotalScores;
-    window.addCustomQuestion = addCustomQuestion;
-    window.saveCustomGame = saveCustomGame;
-    window.renderLastGames = renderLastGames;
+    Object.assign(window, {
+      showScreen,
+      goHome,
+      saveProfile,
+      startGameMasterMode,
+      createNewRoom,
+      joinRoomByCode,
+      joinAsPlayer,
+      leaveRoom,
+      selectGameForRoom,
+      hostNextRound,
+      vote,
+      changeScore,
+      finishGame,
+      undoLastSavedGameScore,
+      resetAllTotalScores,
+      addCustomQuestion,
+      saveCustomGame,
+      renderLastGames
+    });
 
     function showScreen(id) {
-      screens.forEach(screenId => document.getElementById(screenId).classList.remove("active"));
+      screens.forEach(screenId => {
+        document.getElementById(screenId).classList.remove("active");
+      });
+
       document.getElementById(id).classList.add("active");
-      hero.style.display = id === "homeScreen" ? "block" : "none";
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      hero.style.display = id === "profileScreen" || id === "homeScreen" ? "block" : "none";
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
 
       if (id === "myGamesScreen") {
         loadCustomGames();
@@ -1019,6 +1195,127 @@
 
     function goHome() {
       showScreen("homeScreen");
+    }
+
+    function renderProfileAvatars() {
+      profileAvatarGrid.innerHTML = "";
+
+      avatars.forEach(avatar => {
+        const button = document.createElement("button");
+        button.className = "avatar-option";
+
+        if (selectedAvatar === avatar) {
+          button.classList.add("selected");
+        }
+
+        button.textContent = avatar;
+
+        button.onclick = () => {
+          selectedAvatar = avatar;
+          renderProfileAvatars();
+        };
+
+        profileAvatarGrid.appendChild(button);
+      });
+    }
+
+    async function saveProfile() {
+      const name = profileNameInput.value.trim();
+
+      if (!name) {
+        profileMessage.textContent = "Skriv inn brukernavn.";
+        return;
+      }
+
+      if (name.length > 18) {
+        profileMessage.textContent = "Brukernavn kan maks være 18 tegn.";
+        return;
+      }
+
+      profileName = name;
+      profileAvatar = selectedAvatar;
+
+      localStorage.setItem("profileName", profileName);
+      localStorage.setItem("profileAvatar", profileAvatar);
+
+      await registerOnlinePlayer();
+      showScreen("homeScreen");
+    }
+
+    async function registerOnlinePlayer() {
+      if (!profileName) return;
+
+      const data = {
+        id: playerId,
+        name: profileName,
+        avatar: profileAvatar,
+        lobbyCode: currentRoomCode || null,
+        mode: currentMode || null,
+        updatedAt: Date.now()
+      };
+
+      await set(ref(db, `onlinePlayers/${playerId}`), data);
+      onDisconnect(ref(db, `onlinePlayers/${playerId}`)).remove();
+    }
+
+    function subscribeOnlinePlayers() {
+      if (onlineUnsubscribe) onlineUnsubscribe();
+
+      onlineUnsubscribe = onValue(ref(db, "onlinePlayers"), snapshot => {
+        renderOnlinePlayers(snapshot.val() || {});
+      });
+    }
+
+    function renderOnlinePlayers(playersObj) {
+      onlinePlayersList.innerHTML = "";
+
+      const others = Object.values(playersObj).filter(player => player.id !== playerId);
+
+      if (!others.length) {
+        onlinePlayersList.innerHTML = '<p class="muted">Ingen andre spillere er online akkurat nå.</p>';
+        return;
+      }
+
+      others.forEach(player => {
+        const div = document.createElement("div");
+        div.className = "online-player";
+
+        div.innerHTML = `
+          <div class="online-person">
+            <span class="avatar">${player.avatar || "😎"}</span>
+            <span class="online-person-name">${escapeHtml(player.name || "Spiller")}</span>
+          </div>
+          <span class="online-status">${player.lobbyCode ? "I lobby" : "Online"}</span>
+        `;
+
+        div.onclick = () => handleOnlinePlayerClick(player);
+        onlinePlayersList.appendChild(div);
+      });
+    }
+
+    async function handleOnlinePlayerClick(player) {
+      const action = prompt(
+        `Hva vil du gjøre med ${player.name}?\n\nSkriv 1 for å invitere til din lobby.\nSkriv 2 for å bli med i deres lobby.`
+      );
+
+      if (action === "1") {
+        if (!currentRoomCode) {
+          alert("Du må først opprette en flerspiller-lobby før du kan invitere.");
+          return;
+        }
+
+        alert(`${player.name} kan bli med med kode ${currentRoomCode}.`);
+      }
+
+      if (action === "2") {
+        if (!player.lobbyCode) {
+          alert(`${player.name} har ingen aktiv lobby akkurat nå.`);
+          return;
+        }
+
+        joinCodeInput.value = player.lobbyCode;
+        await joinRoomByCode();
+      }
     }
 
     async function startGameMasterMode() {
@@ -1034,16 +1331,14 @@
         code: null,
         hostId: playerId,
         status: "lobby",
-        selectedGameId: null,
-        selectedGame: null,
-        currentRound: null,
-        currentIndex: 0,
         players: {},
         scores: {},
         votes: {},
         createdAt: Date.now(),
         updatedAt: Date.now()
       };
+
+      await registerOnlinePlayer();
 
       lobbyTitle.textContent = "Spillmaster";
       modeBadge.textContent = "Spillmaster";
@@ -1063,8 +1358,11 @@
     async function generateAvailableCode() {
       for (let i = 0; i < 50; i++) {
         const code = randomCode();
-        const snap = await get(ref(db, `rooms/${code}`));
-        if (!snap.exists()) return code;
+        const snapshot = await get(ref(db, `rooms/${code}`));
+
+        if (!snapshot.exists()) {
+          return code;
+        }
       }
 
       throw new Error("Fant ikke ledig spillkode. Prøv igjen.");
@@ -1082,14 +1380,12 @@
           code,
           hostId: playerId,
           status: "lobby",
-          selectedGameId: null,
-          selectedGame: null,
-          currentRound: null,
-          currentIndex: 0,
           scores: {},
           createdAt: Date.now(),
           updatedAt: Date.now()
         });
+
+        await registerOnlinePlayer();
 
         subscribeToRoom(code);
 
@@ -1102,6 +1398,7 @@
         renderAvatarGrid();
         await renderGamesList();
         showScreen("lobbyScreen");
+
         homeMessage.textContent = "";
       } catch (error) {
         console.error(error);
@@ -1111,6 +1408,7 @@
 
     async function joinRoomByCode() {
       currentMode = "multi";
+
       const code = joinCodeInput.value.trim();
 
       if (!/^\d{4}$/.test(code)) {
@@ -1118,14 +1416,17 @@
         return;
       }
 
-      const snap = await get(ref(db, `rooms/${code}`));
+      const snapshot = await get(ref(db, `rooms/${code}`));
 
-      if (!snap.exists()) {
+      if (!snapshot.exists()) {
         joinMessage.textContent = "Fant ikke spill med denne koden.";
         return;
       }
 
       currentRoomCode = code;
+
+      await registerOnlinePlayer();
+
       subscribeToRoom(code);
 
       lobbyTitle.textContent = "Flerspiller";
@@ -1136,6 +1437,7 @@
       renderAvatarGrid();
       await renderGamesList();
       showScreen("lobbyScreen");
+
       joinMessage.textContent = "";
     }
 
@@ -1162,37 +1464,40 @@
       });
     }
 
+    function getUsedAvatars() {
+      if (!currentRoom || !currentRoom.players) return [];
+      return Object.values(currentRoom.players).map(player => player.avatar);
+    }
+
     function renderAvatarGrid() {
       const used = getUsedAvatars();
+
       avatarGrid.innerHTML = "";
 
       avatars.forEach(avatar => {
-        const btn = document.createElement("button");
-        btn.className = "avatar-option";
-        btn.textContent = avatar;
-
-        if (used.includes(avatar)) {
-          btn.classList.add("used");
-          btn.disabled = true;
-        }
+        const button = document.createElement("button");
+        button.className = "avatar-option";
 
         if (selectedAvatar === avatar && !used.includes(avatar)) {
-          btn.classList.add("selected");
+          button.classList.add("selected");
         }
 
-        btn.onclick = () => {
+        if (used.includes(avatar)) {
+          button.classList.add("used");
+          button.disabled = true;
+        }
+
+        button.textContent = avatar;
+
+        button.onclick = () => {
           if (used.includes(avatar)) return;
+
           selectedAvatar = avatar;
           renderAvatarGrid();
         };
 
-        avatarGrid.appendChild(btn);
+        avatarGrid.appendChild(button);
       });
-    }
-
-    function getUsedAvatars() {
-      if (!currentRoom || !currentRoom.players) return [];
-      return Object.values(currentRoom.players).map(p => p.avatar);
     }
 
     async function joinAsPlayer() {
@@ -1211,51 +1516,51 @@
       }
 
       const players = currentRoom.players || {};
-      const nameExists = Object.values(players).some(
-        p => p.name.toLowerCase() === name.toLowerCase() && p.id !== playerId
-      );
+      const nameExists = Object.values(players).some(player => {
+        return player.name.toLowerCase() === name.toLowerCase() && player.id !== playerId;
+      });
 
       if (nameExists) {
         playerMessage.textContent = "Navnet er allerede brukt.";
         return;
       }
 
-      const usedAvatars = getUsedAvatars();
-      const alreadyInRoom = players[playerId];
+      const used = getUsedAvatars();
+      const already = players[playerId];
 
-      if (!alreadyInRoom && usedAvatars.includes(selectedAvatar)) {
+      if (!already && used.includes(selectedAvatar)) {
         playerMessage.textContent = "Dette spillerbildet er allerede brukt.";
         renderAvatarGrid();
         return;
       }
 
-      const avatarToUse = alreadyInRoom ? alreadyInRoom.avatar : selectedAvatar;
+      const avatar = already ? already.avatar : selectedAvatar;
+      const id = currentMode === "master" ? crypto.randomUUID() : playerId;
 
       const playerData = {
-        id: playerId,
+        id,
         name,
-        avatar: avatarToUse,
+        avatar,
         joinedAt: Date.now(),
-        isHost: currentRoom.hostId === playerId
+        isHost: currentRoom.hostId === id
       };
 
       const scoreData = {
         name,
-        avatar: avatarToUse,
-        current: currentRoom.scores?.[playerId]?.current || 0,
-        total: currentRoom.scores?.[playerId]?.total || 0
+        avatar,
+        current: currentRoom.scores?.[id]?.current || 0,
+        total: currentRoom.scores?.[id]?.total || 0
       };
 
-      localStorage.setItem("playerName", name);
-
       if (currentMode === "master") {
-        currentRoom.players[playerId] = playerData;
-        currentRoom.scores[playerId] = scoreData;
+        currentRoom.players[id] = playerData;
+        currentRoom.scores[id] = scoreData;
+
         renderLobby();
         renderAvatarGrid();
       } else {
-        await set(ref(db, `rooms/${currentRoomCode}/players/${playerId}`), playerData);
-        await update(ref(db, `rooms/${currentRoomCode}/scores/${playerId}`), scoreData);
+        await set(ref(db, `rooms/${currentRoomCode}/players/${id}`), playerData);
+        await update(ref(db, `rooms/${currentRoomCode}/scores/${id}`), scoreData);
       }
 
       playerNameInput.value = "";
@@ -1272,13 +1577,17 @@
         hostGameSelect.style.display = "block";
       }
 
-      const players = currentRoom.players || {};
       playersList.innerHTML = "";
 
-      Object.values(players).forEach(p => {
+      Object.values(currentRoom.players || {}).forEach(player => {
         const chip = document.createElement("div");
         chip.className = "player-chip";
-        chip.innerHTML = `<span class="avatar">${p.avatar}</span> ${escapeHtml(p.name)}${p.isHost ? " 👑" : ""}`;
+
+        chip.innerHTML = `
+          <span class="avatar">${player.avatar}</span>
+          ${escapeHtml(player.name)}${player.isHost ? " 👑" : ""}
+        `;
+
         playersList.appendChild(chip);
       });
 
@@ -1286,22 +1595,14 @@
     }
 
     async function leaveRoom() {
-      if (currentMode === "master") {
-        currentRoom = null;
-        currentRoomCode = null;
-        goHome();
-        return;
+      if (currentMode === "multi" && currentRoomCode) {
+        await remove(ref(db, `rooms/${currentRoomCode}/players/${playerId}`));
       }
 
-      if (!currentRoomCode) {
-        goHome();
-        return;
-      }
-
-      await remove(ref(db, `rooms/${currentRoomCode}/players/${playerId}`));
-
-      currentRoomCode = null;
       currentRoom = null;
+      currentRoomCode = null;
+
+      await registerOnlinePlayer();
 
       if (roomUnsubscribe) {
         roomUnsubscribe();
@@ -1312,24 +1613,28 @@
     }
 
     async function renderGamesList() {
-      const allGames = await getAllGames();
+      const all = await getAllGames();
+
       gamesList.innerHTML = "";
 
-      Object.values(allGames).forEach(game => {
-        const btn = document.createElement("button");
-        btn.className = "game-card";
-        btn.innerHTML = `
+      Object.values(all).forEach(game => {
+        const button = document.createElement("button");
+        button.className = "game-card";
+
+        button.innerHTML = `
           <div class="game-number">${game.custom ? "Egen lek" : "Standardlek"}</div>
           <h3>${escapeHtml(game.title)}</h3>
           <p>${escapeHtml(game.description || "")}</p>
         `;
-        btn.onclick = () => selectGameForRoom(game.id, game);
-        gamesList.appendChild(btn);
+
+        button.onclick = () => selectGameForRoom(game.id, game);
+        gamesList.appendChild(button);
       });
     }
 
     async function getAllGames() {
       await loadCustomGamesData();
+
       return {
         ...defaultGames,
         ...customGames
@@ -1337,19 +1642,16 @@
     }
 
     async function selectGameForRoom(gameId, game) {
-      if (!currentRoom) return;
+      if (!currentRoom || currentRoom.hostId !== playerId) return;
 
-      if (currentRoom.hostId !== playerId) return;
-
-      const playerCount = Object.keys(currentRoom.players || {}).length;
-
-      if (playerCount < 2) {
+      if (Object.keys(currentRoom.players || {}).length < 2) {
         alert("Legg til minst to spillere før du starter.");
         return;
       }
 
       const shuffled = shuffle([...game.questions]);
-      const updatedRoom = {
+
+      const updated = {
         selectedGameId: gameId,
         selectedGame: {
           ...game,
@@ -1357,7 +1659,7 @@
         },
         status: "playing",
         currentIndex: 0,
-        currentRound: makeRound(shuffled[0], game, currentRoom.players || {}),
+        currentRound: makeRound(shuffled[0], game, currentRoom.players || {}, []),
         votes: {},
         updatedAt: Date.now()
       };
@@ -1365,38 +1667,63 @@
       if (currentMode === "master") {
         currentRoom = {
           ...currentRoom,
-          ...updatedRoom
+          ...updated
         };
+
         showScreen("playScreen");
         renderPlay();
       } else {
-        await update(ref(db, `rooms/${currentRoomCode}`), updatedRoom);
+        await update(ref(db, `rooms/${currentRoomCode}`), updated);
       }
     }
 
-    function makeRound(question, game, playersObj) {
+    function makeRound(question, game, playersObj, previousDrawnPlayerIds = []) {
       const players = Object.values(playersObj);
 
       const round = {
         id: crypto.randomUUID(),
         text: question.text,
         type: question.type,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        drawnPlayerIds: []
       };
 
+      function eligible(count = 1) {
+        const previous = new Set(previousDrawnPlayerIds || []);
+
+        let list = players.filter(player => !previous.has(player.id));
+
+        if (list.length < count) {
+          list = [...players];
+        }
+
+        return shuffle([...list]);
+      }
+
       if (question.type === "duel") {
-        const chosen = shuffle([...players]).slice(0, 2);
-        round.duel = chosen.map(p => ({ id: p.id, name: p.name, avatar: p.avatar }));
+        const chosen = eligible(2).slice(0, 2);
+
+        round.duel = chosen.map(player => ({
+          id: player.id,
+          name: player.name,
+          avatar: player.avatar
+        }));
+
+        round.drawnPlayerIds = chosen.map(player => player.id);
       }
 
-      if (question.type === "secret") {
-        const chosen = shuffle([...players])[0];
-        round.target = { id: chosen.id, name: chosen.name, avatar: chosen.avatar };
-      }
+      if (question.type === "secret" || question.type === "card") {
+        const chosen = eligible(1)[0];
 
-      if (question.type === "card") {
-        const chosen = shuffle([...players])[0];
-        round.target = { id: chosen.id, name: chosen.name, avatar: chosen.avatar };
+        if (chosen) {
+          round.target = {
+            id: chosen.id,
+            name: chosen.name,
+            avatar: chosen.avatar
+          };
+
+          round.drawnPlayerIds = [chosen.id];
+        }
       }
 
       return round;
@@ -1410,10 +1737,16 @@
       const game = currentRoom.selectedGame;
       const nextIndex = (currentRoom.currentIndex + 1) % game.questions.length;
       const nextQuestion = game.questions[nextIndex];
+      const previousDrawnPlayerIds = currentRoom.currentRound?.drawnPlayerIds || [];
 
       const updateData = {
         currentIndex: nextIndex,
-        currentRound: makeRound(nextQuestion, game, currentRoom.players || {}),
+        currentRound: makeRound(
+          nextQuestion,
+          game,
+          currentRoom.players || {},
+          previousDrawnPlayerIds
+        ),
         votes: {},
         updatedAt: Date.now()
       };
@@ -1423,6 +1756,7 @@
           ...currentRoom,
           ...updateData
         };
+
         renderPlay();
       } else {
         await update(ref(db, `rooms/${currentRoomCode}`), updateData);
@@ -1436,17 +1770,15 @@
       const round = currentRoom.currentRound;
       const players = currentRoom.players || {};
       const scores = currentRoom.scores || {};
-      const isHost = currentRoom.hostId === playerId;
 
       currentGameTitle.textContent = game.title;
       currentGameDesc.textContent = game.description || "";
       questionCounter.textContent = `${(currentRoom.currentIndex || 0) + 1}/${game.questions.length}`;
 
-      hostControls.style.display = isHost ? "grid" : "none";
+      hostControls.style.display = currentRoom.hostId === playerId ? "grid" : "none";
 
-      const hasScore = !!game.scoring;
-      scoreboard.classList.toggle("hidden", !hasScore);
-      playLayout.classList.toggle("no-score", !hasScore);
+      scoreboard.classList.toggle("hidden", !game.scoring);
+      playLayout.classList.toggle("no-score", !game.scoring);
 
       if (!round) return;
 
@@ -1455,57 +1787,93 @@
       } else if (round.type === "card") {
         roundText.textContent = `${round.target?.name || "En spiller"} trekker: ${round.text}`;
       } else if (round.type === "duel") {
-        const a = round.duel?.[0]?.name || "Spiller A";
-        const b = round.duel?.[1]?.name || "Spiller B";
-        roundText.textContent = `${a} vs ${b}: ${round.text}`;
+        const first = round.duel?.[0]?.name || "Spiller A";
+        const second = round.duel?.[1]?.name || "Spiller B";
+
+        roundText.textContent = `${first} vs ${second}: ${round.text}`;
       } else {
         roundText.textContent = round.text;
       }
 
       renderVoteArea(round, players);
-      renderScoreboard(scores, hasScore);
+      renderWinnerMessage(round, players);
+      renderScoreboard(scores, !!game.scoring);
     }
 
     function renderVoteArea(round, playersObj) {
       voteArea.innerHTML = "";
+
       const votes = currentRoom.votes || {};
       const myVote = votes[playerId];
+      const already = !!myVote;
 
       if (round.type === "votePlayer") {
-        Object.values(playersObj).forEach(p => {
-          const btn = document.createElement("button");
-          btn.className = "vote-button";
-          if (myVote === p.id) btn.classList.add("selected");
-          btn.innerHTML = `${p.avatar} ${escapeHtml(p.name)} - ${countVotesFor(p.id)} stemmer`;
-          btn.onclick = () => vote(p.id);
-          voteArea.appendChild(btn);
-        });
+        Object.values(playersObj).forEach(player => addVoteButton(player, myVote, already));
       }
 
       if (round.type === "duel") {
-        (round.duel || []).forEach(p => {
-          const btn = document.createElement("button");
-          btn.className = "vote-button";
-          if (myVote === p.id) btn.classList.add("selected");
-          btn.innerHTML = `${p.avatar} ${escapeHtml(p.name)} - ${countVotesFor(p.id)} stemmer`;
-          btn.onclick = () => vote(p.id);
-          voteArea.appendChild(btn);
-        });
+        (round.duel || []).forEach(player => addVoteButton(player, myVote, already));
       }
 
       if (round.type === "speed" && currentRoom.hostId === playerId) {
-        Object.values(playersObj).forEach(p => {
-          const btn = document.createElement("button");
-          btn.className = "vote-button";
-          btn.innerHTML = `${p.avatar} ${escapeHtml(p.name)} +1`;
-          btn.onclick = () => changeScore(p.id, 1);
-          voteArea.appendChild(btn);
+        Object.values(playersObj).forEach(player => {
+          const button = document.createElement("button");
+          button.className = "vote-button";
+          button.innerHTML = `${player.avatar} ${escapeHtml(player.name)} +1`;
+          button.onclick = () => changeScore(player.id, 1);
+          voteArea.appendChild(button);
         });
       }
     }
 
+    function addVoteButton(player, myVote, already) {
+      const button = document.createElement("button");
+      button.className = "vote-button";
+
+      if (myVote === player.id) {
+        button.classList.add("selected");
+      }
+
+      button.disabled = already;
+      button.innerHTML = `${player.avatar} ${escapeHtml(player.name)} - ${countVotesFor(player.id)} stemmer`;
+      button.onclick = () => vote(player.id);
+
+      voteArea.appendChild(button);
+    }
+
+    function renderWinnerMessage(round, playersObj) {
+      winnerMessage.classList.remove("active");
+      winnerMessage.textContent = "";
+
+      if (!["votePlayer", "duel"].includes(round.type)) return;
+
+      const players = Object.values(playersObj || {});
+      const votes = currentRoom.votes || {};
+
+      if (Object.keys(votes).length < players.length) return;
+
+      const counts = {};
+
+      Object.values(votes).forEach(id => {
+        counts[id] = (counts[id] || 0) + 1;
+      });
+
+      const winnerId = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+
+      const winner =
+        players.find(player => player.id === winnerId) ||
+        round.duel?.find(player => player.id === winnerId);
+
+      if (!winner) return;
+
+      winnerMessage.textContent = `${winner.name} vant runden med ${counts[winnerId]} stemmer!`;
+      winnerMessage.classList.add("active");
+    }
+
     async function vote(targetId) {
-      if (!currentRoom || !currentRoom.currentRound) return;
+      if (!currentRoom?.currentRound) return;
+
+      if (currentRoom.votes?.[playerId]) return;
 
       if (currentMode === "master") {
         currentRoom.votes = currentRoom.votes || {};
@@ -1517,22 +1885,19 @@
     }
 
     function countVotesFor(targetId) {
-      const votes = currentRoom?.votes || {};
-      return Object.values(votes).filter(v => v === targetId).length;
+      return Object.values(currentRoom?.votes || {}).filter(value => value === targetId).length;
     }
 
     async function awardVoteWinnerIfRelevant() {
       const round = currentRoom.currentRound;
       const game = currentRoom.selectedGame;
 
-      if (!game.scoring) return;
-      if (!["votePlayer", "duel"].includes(round.type)) return;
+      if (!game.scoring || !["votePlayer", "duel"].includes(round.type)) return;
 
-      const votes = currentRoom.votes || {};
       const counts = {};
 
-      Object.values(votes).forEach(targetId => {
-        counts[targetId] = (counts[targetId] || 0) + 1;
+      Object.values(currentRoom.votes || {}).forEach(id => {
+        counts[id] = (counts[id] || 0) + 1;
       });
 
       const winnerId = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
@@ -1547,17 +1912,20 @@
 
       if (currentMode === "master") {
         const old = currentRoom.scores[targetId] || {};
+
         currentRoom.scores[targetId] = {
           current: (old.current || 0) + amount,
           total: old.total || 0,
           name: old.name || currentRoom.players?.[targetId]?.name || "Spiller",
           avatar: old.avatar || currentRoom.players?.[targetId]?.avatar || "😎"
         };
+
         renderPlay();
       } else {
         const scoreRef = ref(db, `rooms/${currentRoomCode}/scores/${targetId}`);
-        const snap = await get(scoreRef);
-        const old = snap.val() || {};
+        const snapshot = await get(scoreRef);
+        const old = snapshot.val() || {};
+
         await update(scoreRef, {
           current: (old.current || 0) + amount,
           total: old.total || 0,
@@ -1572,35 +1940,43 @@
 
       scoreList.innerHTML = "";
 
-      const rows = Object.entries(scoresObj || {}).sort((a, b) => {
-        const aa = (a[1].total || 0) + (a[1].current || 0);
-        const bb = (b[1].total || 0) + (b[1].current || 0);
-        return bb - aa;
-      });
+      Object.entries(scoresObj || {})
+        .sort((a, b) => {
+          const scoreA = (a[1].total || 0) + (a[1].current || 0);
+          const scoreB = (b[1].total || 0) + (b[1].current || 0);
 
-      rows.forEach(([id, s]) => {
-        const row = document.createElement("div");
-        row.className = "score-row";
+          return scoreB - scoreA;
+        })
+        .forEach(([id, score]) => {
+          const row = document.createElement("div");
+          row.className = "score-row";
 
-        row.innerHTML = `
-          <div class="score-main">
-            <div class="score-person">
-              <span class="avatar">${s.avatar || "😎"}</span>
-              <span class="score-name">${escapeHtml(s.name || "Spiller")}</span>
+          row.innerHTML = `
+            <div class="score-main">
+              <div class="score-person">
+                <span class="avatar">${score.avatar || "😎"}</span>
+                <span class="score-name">${escapeHtml(score.name || "Spiller")}</span>
+              </div>
+              <div class="score-number">${(score.total || 0) + (score.current || 0)}</div>
             </div>
-            <div class="score-number">${(s.total || 0) + (s.current || 0)}</div>
-          </div>
-          <div class="score-meta">Denne leken: ${s.current || 0} | Tidligere: ${s.total || 0}</div>
-          ${currentRoom.hostId === playerId ? `
-            <div class="score-buttons">
-              <button class="plus" onclick="changeScore('${id}', 1)">+1</button>
-              <button class="minus" onclick="changeScore('${id}', -1)">-1</button>
-            </div>
-          ` : ""}
-        `;
 
-        scoreList.appendChild(row);
-      });
+            <div class="score-meta">
+              Denne leken: ${score.current || 0} | Tidligere: ${score.total || 0}
+            </div>
+
+            ${
+              currentRoom.hostId === playerId
+                ? `
+              <div class="score-buttons">
+                <button class="plus" onclick="changeScore('${id}', 1)">+1</button>
+                <button class="minus" onclick="changeScore('${id}', -1)">-1</button>
+              </div>`
+                : ""
+            }
+          `;
+
+          scoreList.appendChild(row);
+        });
     }
 
     async function finishGame() {
@@ -1613,17 +1989,18 @@
 
         if (currentMode === "master") {
           Object.keys(currentRoom.scores || {}).forEach(id => {
-            const s = currentRoom.scores[id];
-            s.total = (s.total || 0) + (s.current || 0);
-            s.current = 0;
+            const score = currentRoom.scores[id];
+
+            score.total = (score.total || 0) + (score.current || 0);
+            score.current = 0;
           });
         } else {
-          const freshSnap = await get(ref(db, `rooms/${currentRoomCode}/scores`));
-          const freshScores = freshSnap.val() || {};
+          const snapshot = await get(ref(db, `rooms/${currentRoomCode}/scores`));
+          const freshScores = snapshot.val() || {};
           const updates = {};
 
-          Object.entries(freshScores).forEach(([id, s]) => {
-            updates[`rooms/${currentRoomCode}/scores/${id}/total`] = (s.total || 0) + (s.current || 0);
+          Object.entries(freshScores).forEach(([id, score]) => {
+            updates[`rooms/${currentRoomCode}/scores/${id}/total`] = (score.total || 0) + (score.current || 0);
             updates[`rooms/${currentRoomCode}/scores/${id}/current`] = 0;
           });
 
@@ -1633,9 +2010,7 @@
 
       saveLastGameLocal(currentRoom);
 
-      if (currentMode === "master") {
-        currentRoom.status = "finished";
-      } else {
+      if (currentMode === "multi") {
         await update(ref(db, `rooms/${currentRoomCode}`), {
           status: "finished",
           updatedAt: Date.now()
@@ -1661,11 +2036,12 @@
 
     function renderLastGames() {
       const list = JSON.parse(localStorage.getItem("lastGames") || "[]");
-      const el = document.getElementById("lastGamesList");
-      el.innerHTML = "";
+      const element = document.getElementById("lastGamesList");
 
-      if (list.length === 0) {
-        el.innerHTML = `<p class="muted">Ingen fullførte spill lagret ennå.</p>`;
+      element.innerHTML = "";
+
+      if (!list.length) {
+        element.innerHTML = '<p class="muted">Ingen fullførte spill lagret ennå.</p>';
         return;
       }
 
@@ -1673,17 +2049,21 @@
         const div = document.createElement("div");
         div.className = "last-game";
 
-        const scores = Object.values(game.scores || {}).sort((a, b) => {
-          return ((b.total || 0) + (b.current || 0)) - ((a.total || 0) + (a.current || 0));
-        });
-
         div.innerHTML = `
           <strong>${escapeHtml(game.gameTitle)}</strong>
-          <p class="muted">Modus/kode: ${game.code} | ${new Date(game.finishedAt).toLocaleString("no-NO")}</p>
-          ${scores.map(s => `<div>${s.avatar || "😎"} ${escapeHtml(s.name || "Spiller")}: ${(s.total || 0) + (s.current || 0)}</div>`).join("")}
+          <p class="muted">
+            Modus/kode: ${game.code} | ${new Date(game.finishedAt).toLocaleString("no-NO")}
+          </p>
+          ${
+            Object.values(game.scores || {})
+              .map(score => {
+                return `<div>${score.avatar || "😎"} ${escapeHtml(score.name || "Spiller")}: ${(score.total || 0) + (score.current || 0)}</div>`;
+              })
+              .join("")
+          }
         `;
 
-        el.appendChild(div);
+        element.appendChild(div);
       });
     }
 
@@ -1693,6 +2073,7 @@
 
     async function resetAllTotalScores() {
       if (!currentRoom || currentRoom.hostId !== playerId) return;
+
       if (!confirm("Slette totalscore i dette spillet?")) return;
 
       if (currentMode === "master") {
@@ -1700,12 +2081,12 @@
           currentRoom.scores[id].total = 0;
           currentRoom.scores[id].current = 0;
         });
+
         renderPlay();
       } else {
-        const scores = currentRoom.scores || {};
         const updates = {};
 
-        Object.keys(scores).forEach(id => {
+        Object.keys(currentRoom.scores || {}).forEach(id => {
           updates[`rooms/${currentRoomCode}/scores/${id}/total`] = 0;
           updates[`rooms/${currentRoomCode}/scores/${id}/current`] = 0;
         });
@@ -1723,24 +2104,31 @@
         return;
       }
 
-      customDraftQuestions.push({ text, type });
+      customDraftQuestions.push({
+        text,
+        type
+      });
+
       document.getElementById("customQuestionText").value = "";
       renderCustomDraft();
     }
 
     function renderCustomDraft() {
-      const el = document.getElementById("customQuestionsList");
-      el.innerHTML = "";
+      const element = document.getElementById("customQuestionsList");
 
-      customDraftQuestions.forEach((q, index) => {
+      element.innerHTML = "";
+
+      customDraftQuestions.forEach((question, index) => {
         const div = document.createElement("div");
         div.className = "custom-item";
+
         div.innerHTML = `
-          <strong>${index + 1}. ${escapeHtml(q.type)}</strong>
-          <p>${escapeHtml(q.text)}</p>
+          <strong>${index + 1}. ${escapeHtml(question.type)}</strong>
+          <p>${escapeHtml(question.text)}</p>
           <button class="btn btn-danger" onclick="removeCustomQuestion(${index})">Slett</button>
         `;
-        el.appendChild(div);
+
+        element.appendChild(div);
       });
     }
 
@@ -1752,20 +2140,22 @@
     async function saveCustomGame() {
       const title = document.getElementById("customGameName").value.trim();
       const description = document.getElementById("customGameDescription").value.trim();
-      const msg = document.getElementById("customGameMessage");
+      const message = document.getElementById("customGameMessage");
 
       if (!title) {
-        msg.textContent = "Gi leken et navn.";
+        message.textContent = "Gi leken et navn.";
         return;
       }
 
-      if (customDraftQuestions.length === 0) {
-        msg.textContent = "Legg til minst én oppgave.";
+      if (!customDraftQuestions.length) {
+        message.textContent = "Legg til minst én oppgave.";
         return;
       }
 
       const gameId = `custom-${crypto.randomUUID()}`;
-      const scoring = customDraftQuestions.some(q => ["votePlayer", "duel", "speed"].includes(q.type));
+      const scoring = customDraftQuestions.some(question => {
+        return ["votePlayer", "duel", "speed"].includes(question.type);
+      });
 
       const game = {
         id: gameId,
@@ -1780,17 +2170,19 @@
       await set(ref(db, `customGames/${ownerId}/${gameId}`), game);
 
       customDraftQuestions = [];
+
       document.getElementById("customGameName").value = "";
       document.getElementById("customGameDescription").value = "";
       document.getElementById("customQuestionText").value = "";
+
       renderCustomDraft();
 
-      msg.textContent = "Leken er lagret.";
+      message.textContent = "Leken er lagret.";
     }
 
     async function loadCustomGamesData() {
-      const snap = await get(ref(db, `customGames/${ownerId}`));
-      customGames = snap.val() || {};
+      const snapshot = await get(ref(db, `customGames/${ownerId}`));
+      customGames = snapshot.val() || {};
     }
 
     async function loadCustomGames() {
@@ -1800,35 +2192,40 @@
 
       const games = Object.values(customGames);
 
-      if (games.length === 0) {
-        myGamesList.innerHTML = `<p class="muted">Du har ingen egne leker ennå.</p>`;
+      if (!games.length) {
+        myGamesList.innerHTML = '<p class="muted">Du har ingen egne leker ennå.</p>';
         return;
       }
 
       games.forEach(game => {
         const div = document.createElement("div");
         div.className = "custom-item";
+
         div.innerHTML = `
           <strong>${escapeHtml(game.title)}</strong>
           <p class="muted">${escapeHtml(game.description || "")}</p>
           <p>${game.questions?.length || 0} oppgaver</p>
           <button class="btn btn-danger" onclick="deleteCustomGame('${game.id}')">Slett</button>
         `;
+
         myGamesList.appendChild(div);
       });
     }
 
     window.deleteCustomGame = async function(gameId) {
       if (!confirm("Slette denne leken?")) return;
+
       await remove(ref(db, `customGames/${ownerId}/${gameId}`));
       loadCustomGames();
     };
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+
+        [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
       }
+
       return array;
     }
 
@@ -1841,21 +2238,43 @@
         .replaceAll("'", "&#039;");
     }
 
-    playerNameInput.addEventListener("keydown", function(event) {
+    profileNameInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        saveProfile();
+      }
+    });
+
+    playerNameInput.addEventListener("keydown", event => {
       if (event.key === "Enter") {
         event.preventDefault();
         joinAsPlayer();
       }
     });
 
-    joinCodeInput.addEventListener("keydown", function(event) {
+    joinCodeInput.addEventListener("keydown", event => {
       if (event.key === "Enter") {
         event.preventDefault();
         joinRoomByCode();
       }
     });
 
-    renderAvatarGrid();
+    async function init() {
+      renderProfileAvatars();
+      subscribeOnlinePlayers();
+
+      if (profileName) {
+        profileNameInput.value = profileName;
+        selectedAvatar = profileAvatar;
+
+        await registerOnlinePlayer();
+        showScreen("homeScreen");
+      } else {
+        showScreen("profileScreen");
+      }
+    }
+
+    init();
   </script>
 </body>
 </html>
