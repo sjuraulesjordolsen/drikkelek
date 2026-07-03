@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Drikkeleker</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --card: #161616;
+      --card2: #202020;
+      --border: #2d2d2d;
+      --text: #f5f5f5;
+      --muted: #a3a3a3;
+      --orange: #ff7a1a;
+      --orangeSoft: rgba(255, 122, 26, 0.14);
+      --red: #ef4444;
+      --green: #22c55e;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(255,122,26,0.12), transparent 35%),
+        linear-gradient(180deg, #050505, #0c0c0d 45%, #050505);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 26px 16px 52px;
+    }
+
+    .hero {
+      padding: 32px 0 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(46px, 11vw, 82px);
+      letter-spacing: -0.07em;
+      line-height: 0.92;
+    }
+
+    .highlight {
+      color: var(--orange);
+    }
+
+    .hero-text {
+      max-width: 760px;
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: clamp(17px, 4vw, 21px);
+      line-height: 1.45;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.18s ease-out;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel {
+      background: rgba(22,22,22,0.94);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      margin-top: 16px;
+    }
+
+    .title {
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: -0.04em;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 16px;
+      padding: 15px 16px;
+      font-weight: 900;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: #111;
+    }
+
+    .btn-secondary {
+      background: #252525;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-danger {
+      background: rgba(239,68,68,0.14);
+      color: #fecaca;
+      border: 1px solid rgba(239,68,68,0.35);
+    }
+
+    .btn-green {
+      background: rgba(34,197,94,0.16);
+      color: #bbf7d0;
+      border: 1px solid rgba(34,197,94,0.35);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .back {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .back:hover {
+      border-color: var(--orange);
+      color: var(--text);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      background: #0b0b0c;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px var(--orangeSoft);
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .message {
+      min-height: 22px;
+      margin-top: 10px;
+      color: #fbbf24;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .mode-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--orangeSoft);
+      border: 1px solid rgba(255,122,26,0.3);
+      color: var(--orange);
+      font-weight: 900;
+      margin-top: 10px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .code-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border-radius: 18px;
+      background: var(--orangeSoft);
+      border: 1px solid rgba(255,122,26,0.3);
+      color: var(--orange);
+      font-size: 34px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      margin-top: 12px;
+    }
+
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .avatar-option {
+      height: 56px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: #111;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .avatar-option.selected {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px var(--orangeSoft);
+    }
+
+    .avatar-option.used {
+      opacity: 0.25;
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
+
+    .players {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .player-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: #242424;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-weight: 900;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: var(--orangeSoft);
+      border: 1px solid rgba(255,122,26,0.35);
+      font-size: 20px;
+    }
+
+    .games-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .game-card {
+      width: 100%;
+      text-align: left;
+      background:
+        linear-gradient(135deg, rgba(255,122,26,0.08), transparent 38%),
+        var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+
+    .game-card:hover {
+      border-color: rgba(255,122,26,0.65);
+      background:
+        linear-gradient(135deg, rgba(255,122,26,0.14), transparent 40%),
+        var(--card2);
+    }
+
+    .game-number {
+      color: var(--orange);
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .game-card h3 {
+      margin: 0 0 8px;
+      font-size: 23px;
+      letter-spacing: -0.03em;
+    }
+
+    .game-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .play-layout {
+      display: grid;
+      grid-template-columns: 1.25fr 0.85fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .play-layout.no-score {
+      grid-template-columns: 1fr;
+    }
+
+    .round-card {
+      background:
+        radial-gradient(circle at top left, rgba(255,122,26,0.18), transparent 34%),
+        #101010;
+      border: 1px solid rgba(255,122,26,0.25);
+      border-radius: 28px;
+      min-height: 270px;
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .round-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+
+    .round-label {
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .counter {
+      white-space: nowrap;
+      color: var(--orange);
+      background: var(--orangeSoft);
+      border: 1px solid rgba(255,122,26,0.28);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .round-text {
+      font-size: clamp(24px, 6vw, 40px);
+      line-height: 1.08;
+      letter-spacing: -0.05em;
+      font-weight: 950;
+    }
+
+    .vote-area {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .vote-button {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #202020;
+      color: white;
+      padding: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .vote-button.selected {
+      border-color: var(--orange);
+      background: var(--orangeSoft);
+      color: var(--orange);
+    }
+
+    .scoreboard {
+      background: rgba(22,22,22,0.94);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      align-self: start;
+    }
+
+    .scoreboard.hidden {
+      display: none;
+    }
+
+    .scoreboard h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .score-row {
+      background: #101010;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .score-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .score-person {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      font-weight: 900;
+    }
+
+    .score-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .score-number {
+      color: var(--orange);
+      font-size: 20px;
+      font-weight: 950;
+    }
+
+    .score-meta {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .score-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .score-buttons button {
+      border-radius: 13px;
+      padding: 10px;
+      font-weight: 900;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #222;
+      color: var(--text);
+    }
+
+    .plus {
+      color: #bbf7d0 !important;
+      border-color: rgba(34,197,94,0.35) !important;
+      background: rgba(34,197,94,0.12) !important;
+    }
+
+    .minus {
+      color: #fecaca !important;
+      border-color: rgba(239,68,68,0.35) !important;
+      background: rgba(239,68,68,0.12) !important;
+    }
+
+    .custom-item {
+      background: #101010;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    .last-game {
+      background: #101010;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 760px) {
+      .play-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        padding: 20px 14px 40px;
+      }
+
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .panel {
+        border-radius: 22px;
+        padding: 18px;
+      }
+
+      .avatar-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 500px) {
+      .page {
+        max-width: 1080px;
+        padding: 14px 16px 28px;
+      }
+
+      .hero {
+        padding: 10px 0 12px;
+      }
+
+      h1 {
+        font-size: 44px;
+      }
+
+      .hero-text {
+        font-size: 15px;
+        max-width: 900px;
+        margin-top: 8px;
+      }
+
+      .panel {
+        padding: 14px;
+        border-radius: 18px;
+      }
+
+      .game-card {
+        padding: 14px 16px;
+      }
+
+      .play-layout {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .play-layout.no-score {
+        grid-template-columns: 1fr;
+      }
+
+      .round-card {
+        min-height: 210px;
+        padding: 18px;
+      }
+
+      .round-text {
+        font-size: 27px;
+      }
+
+      .scoreboard {
+        max-height: 70vh;
+        overflow-y: auto;
+        border-radius: 18px;
+        padding: 14px;
+      }
+
+      .avatar-grid {
+        grid-template-columns: repeat(10, 1fr);
+      }
+
+      .avatar-option {
+        height: 44px;
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header id="hero" class="hero">
+      <h1>Drikke<span class="highlight">leker</span></h1>
+      <p class="hero-text">
+        Legg til alle spillerne og velg mellom fem kule drikkeleker som setter vennskap på prøve
+        og kårer vinnere og såklart tapere.
+      </p>
+    </header>
+
+    <section id="homeScreen" class="screen active">
+      <div class="panel">
+        <h2 class="title">Start</h2>
+        <p class="muted">Velg om én person styrer spillet, eller om alle spiller fra hver sin telefon.</p>
+
+        <div class="buttons">
+          <button class="btn btn-primary" onclick="startGameMasterMode()">Spillmaster</button>
+          <button class="btn btn-secondary" onclick="createNewRoom()">Flerspiller</button>
+          <button class="btn btn-secondary" onclick="showScreen('joinScreen')">Bli med i spill</button>
+          <button class="btn btn-secondary" onclick="showScreen('customGamesScreen')">Opprett egen lek</button>
+          <button class="btn btn-secondary" onclick="showScreen('myGamesScreen')">Mine leker</button>
+          <button class="btn btn-secondary" onclick="showScreen('lastGamesScreen'); renderLastGames();">Siste spill</button>
+        </div>
+
+        <div class="message" id="homeMessage"></div>
+      </div>
+    </section>
+
+    <section id="joinScreen" class="screen">
+      <div class="topbar">
+        <button class="back" onclick="goHome()">← Tilbake</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="title">Bli med i spill</h2>
+        <p class="muted">Skriv inn 4-sifret kode.</p>
+
+        <input id="joinCodeInput" inputmode="numeric" maxlength="4" placeholder="F.eks. 4821" />
+
+        <button class="btn btn-primary" style="margin-top:12px;" onclick="joinRoomByCode()">Fortsett</button>
+
+        <div class="message" id="joinMessage"></div>
+      </div>
+    </section>
+
+    <section id="lobbyScreen" class="screen">
+      <div class="topbar">
+        <button class="back" onclick="goHome()">← Forside</button>
+        <button class="back" onclick="leaveRoom()">Forlat spill</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="title" id="lobbyTitle">Spill</h2>
+        <div id="modeBadge" class="mode-badge">Spillmaster</div>
+
+        <div id="roomCodePanel">
+          <h3>Spillkode</h3>
+          <div class="code-box" id="roomCodeBox">----</div>
+          <p class="muted">Del koden med de andre spillerne.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="title">Spillere</h2>
+
+        <div class="avatar-grid" id="avatarGrid"></div>
+
+        <div class="input-row">
+          <input id="playerNameInput" placeholder="Skriv inn spillernavn" />
+          <button class="btn btn-primary" onclick="joinAsPlayer()">Legg til</button>
+        </div>
+
+        <div class="message" id="playerMessage"></div>
+
+        <div class="players" id="playersList"></div>
+      </div>
+
+      <div class="panel" id="hostGameSelect">
+        <h2 class="title">Velg lek</h2>
+        <div class="games-list" id="gamesList"></div>
+      </div>
+    </section>
+
+    <section id="playScreen" class="screen">
+      <div class="topbar">
+        <button class="back" onclick="showScreen('lobbyScreen')">← Lobby</button>
+        <button class="back" onclick="goHome()">Forside</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="title" id="currentGameTitle">Lek</h2>
+        <p class="muted" id="currentGameDesc"></p>
+      </div>
+
+      <div id="playLayout" class="play-layout">
+        <div>
+          <div class="round-card">
+            <div class="round-top">
+              <div class="round-label">Runde</div>
+              <div class="counter" id="questionCounter">1/1</div>
+            </div>
+
+            <div class="round-text" id="roundText"></div>
+
+            <div class="vote-area" id="voteArea"></div>
+          </div>
+
+          <div class="buttons" id="hostControls">
+            <button class="btn btn-primary" onclick="hostNextRound()">Neste runde</button>
+            <button class="btn btn-green" onclick="finishGame()">Fullfør leken</button>
+          </div>
+        </div>
+
+        <aside id="scoreboard" class="scoreboard">
+          <h3>Scoreboard</h3>
+          <div id="scoreList"></div>
+          <div class="buttons">
+            <button class="btn btn-secondary" onclick="undoLastSavedGameScore()">Fjern score fra sist spilte lek</button>
+            <button class="btn btn-danger" onclick="resetAllTotalScores()">Slett totalscore</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="customGamesScreen" class="screen">
+      <div class="topbar">
+        <button class="back" onclick="goHome()">← Forside</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="title">Opprett egen lek</h2>
+
+        <input id="customGameName" placeholder="Navn på lek" style="margin-top:10px;" />
+        <textarea id="customGameDescription" placeholder="Kort beskrivelse" style="margin-top:10px;"></textarea>
+
+        <hr style="border-color:#222; margin:18px 0;">
+
+        <h3>Legg til oppgave</h3>
+        <textarea id="customQuestionText" placeholder="Skriv tekst/spørsmål/oppgave"></textarea>
+
+        <select id="customQuestionType" style="margin-top:10px;">
+          <option value="plain">Vanlig spørsmål</option>
+          <option value="votePlayer">Avstemning på spiller</option>
+          <option value="duel">Duell mellom to spillere</option>
+          <option value="speed">Rask oppgave</option>
+          <option value="secret">Hemmelig oppdrag</option>
+          <option value="card">Regelkort / korttrekker</option>
+        </select>
+
+        <button class="btn btn-primary" style="margin-top:10px;" onclick="addCustomQuestion()">Legg til oppgave</button>
+
+        <div id="customQuestionsList"></div>
+
+        <button class="btn btn-green btn-full" onclick="saveCustomGame()">Lagre lek</button>
+
+        <div class="message" id="customGameMessage"></div>
+      </div>
+    </section>
+
+    <section id="myGamesScreen" class="screen">
+      <div class="topbar">
+        <button class="back" onclick="goHome()">← Forside</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="title">Mine leker</h2>
+        <div id="myGamesList"></div>
+      </div>
+    </section>
+
+    <section id="lastGamesScreen" class="screen">
+      <div class="topbar">
+        <button class="back" onclick="goHome()">← Forside</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="title">Siste spill</h2>
+        <p class="muted">Her lagres maks 10 siste fullførte spill lokalt i nettleseren.</p>
+        <div id="lastGamesList"></div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      get,
+      set,
+      update,
+      remove,
+      onValue
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD16Zww0qNv1YAg3kQNOVz2zjkqNX82BkA",
+      authDomain: "drikkelek-ec8d8.firebaseapp.com",
+      databaseURL: "https://drikkelek-ec8d8-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId: "drikkelek-ec8d8",
+      storageBucket: "drikkelek-ec8d8.firebasestorage.app",
+      messagingSenderId: "1057821586206",
+      appId: "1:1057821586206:web:80e804a855451a14ac0f0f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const screens = [
+      "homeScreen",
+      "joinScreen",
+      "lobbyScreen",
+      "playScreen",
+      "customGamesScreen",
+      "myGamesScreen",
+      "lastGamesScreen"
+    ];
+
+    const hero = document.getElementById("hero");
+    const avatars = ["😎", "🤠", "🤡", "🦊", "🐸", "🐵", "👽", "🤖", "🧠", "🔥"];
+    let selectedAvatar = "😎";
+
+    let ownerId = localStorage.getItem("ownerId");
+    if (!ownerId) {
+      ownerId = crypto.randomUUID();
+      localStorage.setItem("ownerId", ownerId);
+    }
+
+    let playerId = localStorage.getItem("playerId");
+    if (!playerId) {
+      playerId = crypto.randomUUID();
+      localStorage.setItem("playerId", playerId);
+    }
+
+    let currentMode = null; // "master" eller "multi"
+    let currentRoomCode = null;
+    let currentRoom = null;
+    let customDraftQuestions = [];
+    let customGames = {};
+    let roomUnsubscribe = null;
+
+    const homeMessage = document.getElementById("homeMessage");
+    const joinMessage = document.getElementById("joinMessage");
+    const playerMessage = document.getElementById("playerMessage");
+    const joinCodeInput = document.getElementById("joinCodeInput");
+    const roomCodeBox = document.getElementById("roomCodeBox");
+    const roomCodePanel = document.getElementById("roomCodePanel");
+    const modeBadge = document.getElementById("modeBadge");
+    const lobbyTitle = document.getElementById("lobbyTitle");
+    const avatarGrid = document.getElementById("avatarGrid");
+    const playerNameInput = document.getElementById("playerNameInput");
+    const playersList = document.getElementById("playersList");
+    const gamesList = document.getElementById("gamesList");
+    const hostGameSelect = document.getElementById("hostGameSelect");
+    const playLayout = document.getElementById("playLayout");
+    const scoreboard = document.getElementById("scoreboard");
+    const scoreList = document.getElementById("scoreList");
+    const currentGameTitle = document.getElementById("currentGameTitle");
+    const currentGameDesc = document.getElementById("currentGameDesc");
+    const questionCounter = document.getElementById("questionCounter");
+    const roundText = document.getElementById("roundText");
+    const voteArea = document.getElementById("voteArea");
+    const hostControls = document.getElementById("hostControls");
+    const myGamesList = document.getElementById("myGamesList");
+
+    const defaultGames = {
+      who: {
+        id: "who",
+        title: "Hvem i rommet?",
+        description: "Alle stemmer på spilleren som passer best.",
+        scoring: true,
+        questions: [
+          { type: "votePlayer", text: "Hvem i rommet hadde overlevd lengst uten mobilen sin?" },
+          { type: "votePlayer", text: "Hvem er mest sannsynlig til å svare 'kommer snart' mens de fortsatt er hjemme?" },
+          { type: "votePlayer", text: "Hvem hadde klart seg best på en realityserie?" },
+          { type: "votePlayer", text: "Hvem bruker mest penger på takeaway?" },
+          { type: "votePlayer", text: "Hvem hadde blitt best sjef?" },
+          { type: "votePlayer", text: "Hvem er mest sannsynlig til å bli rik på en rar idé?" },
+          { type: "votePlayer", text: "Hvem hadde klart seg dårligst på telttur?" },
+          { type: "votePlayer", text: "Hvem har alltid lavest batteri?" },
+          { type: "votePlayer", text: "Hvem blir mest dramatisk over små problemer?" },
+          { type: "votePlayer", text: "Hvem har best stories fra byen?" }
+        ]
+      },
+      cards: {
+        id: "cards",
+        title: "Korttrekkeren",
+        description: "Trekk regler, oppgaver og kaoskort.",
+        scoring: false,
+        questions: [
+          { type: "card", text: "Lag en regel som gjelder de neste tre rundene." },
+          { type: "card", text: "Velg en spiller som må fortelle en fun fact." },
+          { type: "card", text: "Alle bytter plass. Sistemann taper runden." },
+          { type: "card", text: "Velg en kategori. Alle sier ett ord til noen stopper." },
+          { type: "card", text: "Alle må holde maska. Første som ler taper." },
+          { type: "card", text: "Forklar din siste brukte emoji." },
+          { type: "card", text: "Alle sjekker batteri. Lavest batteri taper." },
+          { type: "card", text: "Lag et kallenavn til spilleren til venstre." },
+          { type: "card", text: "Si din mest undervurderte mening." },
+          { type: "card", text: "To spillere har komplimentduell." }
+        ]
+      },
+      speed: {
+        id: "speed",
+        title: "Raskere enn resten",
+        description: "Svar raskest. Spillmaster gir poeng.",
+        scoring: true,
+        questions: [
+          { type: "speed", text: "Nevn tre strømmetjenester." },
+          { type: "speed", text: "Pek på noe oransje." },
+          { type: "speed", text: "Si tre ting man finner i et kollektiv." },
+          { type: "speed", text: "Nevn tre ting man gjør på en søndag." },
+          { type: "speed", text: "Finn noe som koster under 100 kroner." },
+          { type: "speed", text: "Si tre norske byer." },
+          { type: "speed", text: "Nevn tre ting du burde gjort tidligere i dag." },
+          { type: "speed", text: "Nevn tre typer kaffe." },
+          { type: "speed", text: "Finn noe svart." },
+          { type: "speed", text: "Si tre sosiale medier." }
+        ]
+      },
+      secret: {
+        id: "secret",
+        title: "Hemmelig oppdrag",
+        description: "En spiller får et hemmelig oppdrag.",
+        scoring: false,
+        questions: [
+          { type: "secret", text: "Få noen til å gi deg en high-five." },
+          { type: "secret", text: "Få noen til å si ordet 'pizza'." },
+          { type: "secret", text: "Start en applaus uten å forklare hvorfor." },
+          { type: "secret", text: "Få noen til å spørre deg 'hvorfor?'." },
+          { type: "secret", text: "Bytt plass med noen uten å forklare grunnen." },
+          { type: "secret", text: "Få noen til å sjekke mobilen sin." },
+          { type: "secret", text: "Få noen til å gi deg et kompliment." },
+          { type: "secret", text: "Få noen til å foreslå en sang." },
+          { type: "secret", text: "Få noen til å nevne trening." },
+          { type: "secret", text: "Få noen til å si 'ok, fair'." }
+        ]
+      },
+      duel: {
+        id: "duel",
+        title: "Dilemma-duellen",
+        description: "To spillere møtes i et dilemma. Alle stemmer.",
+        scoring: true,
+        questions: [
+          { type: "duel", text: "Ville du heller alltid komme ti minutter for sent eller én time for tidlig?" },
+          { type: "duel", text: "Ville du heller aldri bruke sosiale medier igjen eller aldri se film igjen?" },
+          { type: "duel", text: "Ville du heller ha gratis kaffe eller gratis taco resten av livet?" },
+          { type: "duel", text: "Ville du heller ha drømmejobben med dårlig lønn eller kjedelig jobb med veldig god lønn?" },
+          { type: "duel", text: "Ville du heller alltid si hva du tenker eller aldri kunne forklare deg?" },
+          { type: "duel", text: "Ville du heller være best i verden på karaoke eller quiz?" },
+          { type: "duel", text: "Ville du heller alltid ha lavt batteri eller dårlig WiFi?" },
+          { type: "duel", text: "Ville du heller ha ubegrenset klær eller ubegrenset reiser?" },
+          { type: "duel", text: "Ville du heller alltid få ærlige svar eller alltid vite når noen lyver?" },
+          { type: "duel", text: "Ville du heller vinne hver diskusjon eller alltid få siste ord?" }
+        ]
+      }
+    };
+
+    window.showScreen = showScreen;
+    window.goHome = goHome;
+    window.startGameMasterMode = startGameMasterMode;
+    window.createNewRoom = createNewRoom;
+    window.joinRoomByCode = joinRoomByCode;
+    window.joinAsPlayer = joinAsPlayer;
+    window.leaveRoom = leaveRoom;
+    window.selectGameForRoom = selectGameForRoom;
+    window.hostNextRound = hostNextRound;
+    window.vote = vote;
+    window.changeScore = changeScore;
+    window.finishGame = finishGame;
+    window.undoLastSavedGameScore = undoLastSavedGameScore;
+    window.resetAllTotalScores = resetAllTotalScores;
+    window.addCustomQuestion = addCustomQuestion;
+    window.saveCustomGame = saveCustomGame;
+    window.renderLastGames = renderLastGames;
+
+    function showScreen(id) {
+      screens.forEach(screenId => document.getElementById(screenId).classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      hero.style.display = id === "homeScreen" ? "block" : "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      if (id === "myGamesScreen") {
+        loadCustomGames();
+      }
+    }
+
+    function goHome() {
+      showScreen("homeScreen");
+    }
+
+    async function startGameMasterMode() {
+      currentMode = "master";
+      currentRoomCode = null;
+
+      if (roomUnsubscribe) {
+        roomUnsubscribe();
+        roomUnsubscribe = null;
+      }
+
+      currentRoom = {
+        code: null,
+        hostId: playerId,
+        status: "lobby",
+        selectedGameId: null,
+        selectedGame: null,
+        currentRound: null,
+        currentIndex: 0,
+        players: {},
+        scores: {},
+        votes: {},
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+
+      lobbyTitle.textContent = "Spillmaster";
+      modeBadge.textContent = "Spillmaster";
+      roomCodePanel.style.display = "none";
+      hostGameSelect.style.display = "block";
+
+      renderAvatarGrid();
+      renderLobby();
+      await renderGamesList();
+      showScreen("lobbyScreen");
+    }
+
+    function randomCode() {
+      return String(Math.floor(1000 + Math.random() * 9000));
+    }
+
+    async function generateAvailableCode() {
+      for (let i = 0; i < 50; i++) {
+        const code = randomCode();
+        const snap = await get(ref(db, `rooms/${code}`));
+        if (!snap.exists()) return code;
+      }
+
+      throw new Error("Fant ikke ledig spillkode. Prøv igjen.");
+    }
+
+    async function createNewRoom() {
+      currentMode = "multi";
+      homeMessage.textContent = "Oppretter flerspiller...";
+
+      try {
+        const code = await generateAvailableCode();
+        currentRoomCode = code;
+
+        await set(ref(db, `rooms/${code}`), {
+          code,
+          hostId: playerId,
+          status: "lobby",
+          selectedGameId: null,
+          selectedGame: null,
+          currentRound: null,
+          currentIndex: 0,
+          scores: {},
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        });
+
+        subscribeToRoom(code);
+
+        lobbyTitle.textContent = "Flerspiller";
+        modeBadge.textContent = "Flerspiller";
+        roomCodePanel.style.display = "block";
+        roomCodeBox.textContent = code;
+        hostGameSelect.style.display = "block";
+
+        renderAvatarGrid();
+        await renderGamesList();
+        showScreen("lobbyScreen");
+        homeMessage.textContent = "";
+      } catch (error) {
+        console.error(error);
+        homeMessage.textContent = error.message;
+      }
+    }
+
+    async function joinRoomByCode() {
+      currentMode = "multi";
+      const code = joinCodeInput.value.trim();
+
+      if (!/^\d{4}$/.test(code)) {
+        joinMessage.textContent = "Koden må være fire siffer.";
+        return;
+      }
+
+      const snap = await get(ref(db, `rooms/${code}`));
+
+      if (!snap.exists()) {
+        joinMessage.textContent = "Fant ikke spill med denne koden.";
+        return;
+      }
+
+      currentRoomCode = code;
+      subscribeToRoom(code);
+
+      lobbyTitle.textContent = "Flerspiller";
+      modeBadge.textContent = "Flerspiller";
+      roomCodePanel.style.display = "block";
+      roomCodeBox.textContent = code;
+
+      renderAvatarGrid();
+      await renderGamesList();
+      showScreen("lobbyScreen");
+      joinMessage.textContent = "";
+    }
+
+    function subscribeToRoom(code) {
+      if (roomUnsubscribe) {
+        roomUnsubscribe();
+        roomUnsubscribe = null;
+      }
+
+      roomUnsubscribe = onValue(ref(db, `rooms/${code}`), snapshot => {
+        currentRoom = snapshot.val();
+
+        if (!currentRoom) {
+          goHome();
+          return;
+        }
+
+        renderLobby();
+        renderPlay();
+
+        if (currentRoom.status === "playing") {
+          showScreen("playScreen");
+        }
+      });
+    }
+
+    function renderAvatarGrid() {
+      const used = getUsedAvatars();
+      avatarGrid.innerHTML = "";
+
+      avatars.forEach(avatar => {
+        const btn = document.createElement("button");
+        btn.className = "avatar-option";
+        btn.textContent = avatar;
+
+        if (used.includes(avatar)) {
+          btn.classList.add("used");
+          btn.disabled = true;
+        }
+
+        if (selectedAvatar === avatar && !used.includes(avatar)) {
+          btn.classList.add("selected");
+        }
+
+        btn.onclick = () => {
+          if (used.includes(avatar)) return;
+          selectedAvatar = avatar;
+          renderAvatarGrid();
+        };
+
+        avatarGrid.appendChild(btn);
+      });
+    }
+
+    function getUsedAvatars() {
+      if (!currentRoom || !currentRoom.players) return [];
+      return Object.values(currentRoom.players).map(p => p.avatar);
+    }
+
+    async function joinAsPlayer() {
+      if (!currentRoom) return;
+
+      const name = playerNameInput.value.trim();
+
+      if (!name) {
+        playerMessage.textContent = "Skriv inn navn.";
+        return;
+      }
+
+      if (name.length > 18) {
+        playerMessage.textContent = "Navn kan maks være 18 tegn.";
+        return;
+      }
+
+      const players = currentRoom.players || {};
+      const nameExists = Object.values(players).some(
+        p => p.name.toLowerCase() === name.toLowerCase() && p.id !== playerId
+      );
+
+      if (nameExists) {
+        playerMessage.textContent = "Navnet er allerede brukt.";
+        return;
+      }
+
+      const usedAvatars = getUsedAvatars();
+      const alreadyInRoom = players[playerId];
+
+      if (!alreadyInRoom && usedAvatars.includes(selectedAvatar)) {
+        playerMessage.textContent = "Dette spillerbildet er allerede brukt.";
+        renderAvatarGrid();
+        return;
+      }
+
+      const avatarToUse = alreadyInRoom ? alreadyInRoom.avatar : selectedAvatar;
+
+      const playerData = {
+        id: playerId,
+        name,
+        avatar: avatarToUse,
+        joinedAt: Date.now(),
+        isHost: currentRoom.hostId === playerId
+      };
+
+      const scoreData = {
+        name,
+        avatar: avatarToUse,
+        current: currentRoom.scores?.[playerId]?.current || 0,
+        total: currentRoom.scores?.[playerId]?.total || 0
+      };
+
+      localStorage.setItem("playerName", name);
+
+      if (currentMode === "master") {
+        currentRoom.players[playerId] = playerData;
+        currentRoom.scores[playerId] = scoreData;
+        renderLobby();
+        renderAvatarGrid();
+      } else {
+        await set(ref(db, `rooms/${currentRoomCode}/players/${playerId}`), playerData);
+        await update(ref(db, `rooms/${currentRoomCode}/scores/${playerId}`), scoreData);
+      }
+
+      playerNameInput.value = "";
+      playerMessage.textContent = "";
+    }
+
+    function renderLobby() {
+      if (!currentRoom) return;
+
+      if (currentMode === "multi") {
+        roomCodeBox.textContent = currentRoom.code;
+        hostGameSelect.style.display = currentRoom.hostId === playerId ? "block" : "none";
+      } else {
+        hostGameSelect.style.display = "block";
+      }
+
+      const players = currentRoom.players || {};
+      playersList.innerHTML = "";
+
+      Object.values(players).forEach(p => {
+        const chip = document.createElement("div");
+        chip.className = "player-chip";
+        chip.innerHTML = `<span class="avatar">${p.avatar}</span> ${escapeHtml(p.name)}${p.isHost ? " 👑" : ""}`;
+        playersList.appendChild(chip);
+      });
+
+      renderAvatarGrid();
+    }
+
+    async function leaveRoom() {
+      if (currentMode === "master") {
+        currentRoom = null;
+        currentRoomCode = null;
+        goHome();
+        return;
+      }
+
+      if (!currentRoomCode) {
+        goHome();
+        return;
+      }
+
+      await remove(ref(db, `rooms/${currentRoomCode}/players/${playerId}`));
+
+      currentRoomCode = null;
+      currentRoom = null;
+
+      if (roomUnsubscribe) {
+        roomUnsubscribe();
+        roomUnsubscribe = null;
+      }
+
+      goHome();
+    }
+
+    async function renderGamesList() {
+      const allGames = await getAllGames();
+      gamesList.innerHTML = "";
+
+      Object.values(allGames).forEach(game => {
+        const btn = document.createElement("button");
+        btn.className = "game-card";
+        btn.innerHTML = `
+          <div class="game-number">${game.custom ? "Egen lek" : "Standardlek"}</div>
+          <h3>${escapeHtml(game.title)}</h3>
+          <p>${escapeHtml(game.description || "")}</p>
+        `;
+        btn.onclick = () => selectGameForRoom(game.id, game);
+        gamesList.appendChild(btn);
+      });
+    }
+
+    async function getAllGames() {
+      await loadCustomGamesData();
+      return {
+        ...defaultGames,
+        ...customGames
+      };
+    }
+
+    async function selectGameForRoom(gameId, game) {
+      if (!currentRoom) return;
+
+      if (currentRoom.hostId !== playerId) return;
+
+      const playerCount = Object.keys(currentRoom.players || {}).length;
+
+      if (playerCount < 2) {
+        alert("Legg til minst to spillere før du starter.");
+        return;
+      }
+
+      const shuffled = shuffle([...game.questions]);
+      const updatedRoom = {
+        selectedGameId: gameId,
+        selectedGame: {
+          ...game,
+          questions: shuffled
+        },
+        status: "playing",
+        currentIndex: 0,
+        currentRound: makeRound(shuffled[0], game, currentRoom.players || {}),
+        votes: {},
+        updatedAt: Date.now()
+      };
+
+      if (currentMode === "master") {
+        currentRoom = {
+          ...currentRoom,
+          ...updatedRoom
+        };
+        showScreen("playScreen");
+        renderPlay();
+      } else {
+        await update(ref(db, `rooms/${currentRoomCode}`), updatedRoom);
+      }
+    }
+
+    function makeRound(question, game, playersObj) {
+      const players = Object.values(playersObj);
+
+      const round = {
+        id: crypto.randomUUID(),
+        text: question.text,
+        type: question.type,
+        createdAt: Date.now()
+      };
+
+      if (question.type === "duel") {
+        const chosen = shuffle([...players]).slice(0, 2);
+        round.duel = chosen.map(p => ({ id: p.id, name: p.name, avatar: p.avatar }));
+      }
+
+      if (question.type === "secret") {
+        const chosen = shuffle([...players])[0];
+        round.target = { id: chosen.id, name: chosen.name, avatar: chosen.avatar };
+      }
+
+      if (question.type === "card") {
+        const chosen = shuffle([...players])[0];
+        round.target = { id: chosen.id, name: chosen.name, avatar: chosen.avatar };
+      }
+
+      return round;
+    }
+
+    async function hostNextRound() {
+      if (!currentRoom || currentRoom.hostId !== playerId) return;
+
+      await awardVoteWinnerIfRelevant();
+
+      const game = currentRoom.selectedGame;
+      const nextIndex = (currentRoom.currentIndex + 1) % game.questions.length;
+      const nextQuestion = game.questions[nextIndex];
+
+      const updateData = {
+        currentIndex: nextIndex,
+        currentRound: makeRound(nextQuestion, game, currentRoom.players || {}),
+        votes: {},
+        updatedAt: Date.now()
+      };
+
+      if (currentMode === "master") {
+        currentRoom = {
+          ...currentRoom,
+          ...updateData
+        };
+        renderPlay();
+      } else {
+        await update(ref(db, `rooms/${currentRoomCode}`), updateData);
+      }
+    }
+
+    function renderPlay() {
+      if (!currentRoom || currentRoom.status !== "playing" || !currentRoom.selectedGame) return;
+
+      const game = currentRoom.selectedGame;
+      const round = currentRoom.currentRound;
+      const players = currentRoom.players || {};
+      const scores = currentRoom.scores || {};
+      const isHost = currentRoom.hostId === playerId;
+
+      currentGameTitle.textContent = game.title;
+      currentGameDesc.textContent = game.description || "";
+      questionCounter.textContent = `${(currentRoom.currentIndex || 0) + 1}/${game.questions.length}`;
+
+      hostControls.style.display = isHost ? "grid" : "none";
+
+      const hasScore = !!game.scoring;
+      scoreboard.classList.toggle("hidden", !hasScore);
+      playLayout.classList.toggle("no-score", !hasScore);
+
+      if (!round) return;
+
+      if (round.type === "secret") {
+        roundText.textContent = `${round.target?.name || "En spiller"}, ditt hemmelige oppdrag er: ${round.text}`;
+      } else if (round.type === "card") {
+        roundText.textContent = `${round.target?.name || "En spiller"} trekker: ${round.text}`;
+      } else if (round.type === "duel") {
+        const a = round.duel?.[0]?.name || "Spiller A";
+        const b = round.duel?.[1]?.name || "Spiller B";
+        roundText.textContent = `${a} vs ${b}: ${round.text}`;
+      } else {
+        roundText.textContent = round.text;
+      }
+
+      renderVoteArea(round, players);
+      renderScoreboard(scores, hasScore);
+    }
+
+    function renderVoteArea(round, playersObj) {
+      voteArea.innerHTML = "";
+      const votes = currentRoom.votes || {};
+      const myVote = votes[playerId];
+
+      if (round.type === "votePlayer") {
+        Object.values(playersObj).forEach(p => {
+          const btn = document.createElement("button");
+          btn.className = "vote-button";
+          if (myVote === p.id) btn.classList.add("selected");
+          btn.innerHTML = `${p.avatar} ${escapeHtml(p.name)} - ${countVotesFor(p.id)} stemmer`;
+          btn.onclick = () => vote(p.id);
+          voteArea.appendChild(btn);
+        });
+      }
+
+      if (round.type === "duel") {
+        (round.duel || []).forEach(p => {
+          const btn = document.createElement("button");
+          btn.className = "vote-button";
+          if (myVote === p.id) btn.classList.add("selected");
+          btn.innerHTML = `${p.avatar} ${escapeHtml(p.name)} - ${countVotesFor(p.id)} stemmer`;
+          btn.onclick = () => vote(p.id);
+          voteArea.appendChild(btn);
+        });
+      }
+
+      if (round.type === "speed" && currentRoom.hostId === playerId) {
+        Object.values(playersObj).forEach(p => {
+          const btn = document.createElement("button");
+          btn.className = "vote-button";
+          btn.innerHTML = `${p.avatar} ${escapeHtml(p.name)} +1`;
+          btn.onclick = () => changeScore(p.id, 1);
+          voteArea.appendChild(btn);
+        });
+      }
+    }
+
+    async function vote(targetId) {
+      if (!currentRoom || !currentRoom.currentRound) return;
+
+      if (currentMode === "master") {
+        currentRoom.votes = currentRoom.votes || {};
+        currentRoom.votes[playerId] = targetId;
+        renderPlay();
+      } else {
+        await set(ref(db, `rooms/${currentRoomCode}/votes/${playerId}`), targetId);
+      }
+    }
+
+    function countVotesFor(targetId) {
+      const votes = currentRoom?.votes || {};
+      return Object.values(votes).filter(v => v === targetId).length;
+    }
+
+    async function awardVoteWinnerIfRelevant() {
+      const round = currentRoom.currentRound;
+      const game = currentRoom.selectedGame;
+
+      if (!game.scoring) return;
+      if (!["votePlayer", "duel"].includes(round.type)) return;
+
+      const votes = currentRoom.votes || {};
+      const counts = {};
+
+      Object.values(votes).forEach(targetId => {
+        counts[targetId] = (counts[targetId] || 0) + 1;
+      });
+
+      const winnerId = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+
+      if (winnerId) {
+        await changeScore(winnerId, 1);
+      }
+    }
+
+    async function changeScore(targetId, amount) {
+      if (!currentRoom) return;
+
+      if (currentMode === "master") {
+        const old = currentRoom.scores[targetId] || {};
+        currentRoom.scores[targetId] = {
+          current: (old.current || 0) + amount,
+          total: old.total || 0,
+          name: old.name || currentRoom.players?.[targetId]?.name || "Spiller",
+          avatar: old.avatar || currentRoom.players?.[targetId]?.avatar || "😎"
+        };
+        renderPlay();
+      } else {
+        const scoreRef = ref(db, `rooms/${currentRoomCode}/scores/${targetId}`);
+        const snap = await get(scoreRef);
+        const old = snap.val() || {};
+        await update(scoreRef, {
+          current: (old.current || 0) + amount,
+          total: old.total || 0,
+          name: old.name || currentRoom.players?.[targetId]?.name || "Spiller",
+          avatar: old.avatar || currentRoom.players?.[targetId]?.avatar || "😎"
+        });
+      }
+    }
+
+    function renderScoreboard(scoresObj, hasScore) {
+      if (!hasScore) return;
+
+      scoreList.innerHTML = "";
+
+      const rows = Object.entries(scoresObj || {}).sort((a, b) => {
+        const aa = (a[1].total || 0) + (a[1].current || 0);
+        const bb = (b[1].total || 0) + (b[1].current || 0);
+        return bb - aa;
+      });
+
+      rows.forEach(([id, s]) => {
+        const row = document.createElement("div");
+        row.className = "score-row";
+
+        row.innerHTML = `
+          <div class="score-main">
+            <div class="score-person">
+              <span class="avatar">${s.avatar || "😎"}</span>
+              <span class="score-name">${escapeHtml(s.name || "Spiller")}</span>
+            </div>
+            <div class="score-number">${(s.total || 0) + (s.current || 0)}</div>
+          </div>
+          <div class="score-meta">Denne leken: ${s.current || 0} | Tidligere: ${s.total || 0}</div>
+          ${currentRoom.hostId === playerId ? `
+            <div class="score-buttons">
+              <button class="plus" onclick="changeScore('${id}', 1)">+1</button>
+              <button class="minus" onclick="changeScore('${id}', -1)">-1</button>
+            </div>
+          ` : ""}
+        `;
+
+        scoreList.appendChild(row);
+      });
+    }
+
+    async function finishGame() {
+      if (!currentRoom || currentRoom.hostId !== playerId) return;
+
+      const game = currentRoom.selectedGame;
+
+      if (game.scoring) {
+        await awardVoteWinnerIfRelevant();
+
+        if (currentMode === "master") {
+          Object.keys(currentRoom.scores || {}).forEach(id => {
+            const s = currentRoom.scores[id];
+            s.total = (s.total || 0) + (s.current || 0);
+            s.current = 0;
+          });
+        } else {
+          const freshSnap = await get(ref(db, `rooms/${currentRoomCode}/scores`));
+          const freshScores = freshSnap.val() || {};
+          const updates = {};
+
+          Object.entries(freshScores).forEach(([id, s]) => {
+            updates[`rooms/${currentRoomCode}/scores/${id}/total`] = (s.total || 0) + (s.current || 0);
+            updates[`rooms/${currentRoomCode}/scores/${id}/current`] = 0;
+          });
+
+          await update(ref(db), updates);
+        }
+      }
+
+      saveLastGameLocal(currentRoom);
+
+      if (currentMode === "master") {
+        currentRoom.status = "finished";
+      } else {
+        await update(ref(db, `rooms/${currentRoomCode}`), {
+          status: "finished",
+          updatedAt: Date.now()
+        });
+      }
+
+      alert("Leken er fullført og lagret lokalt som et av de 10 siste spillene.");
+      goHome();
+    }
+
+    function saveLastGameLocal(room) {
+      const lastGames = JSON.parse(localStorage.getItem("lastGames") || "[]");
+
+      lastGames.unshift({
+        code: room.code || "SPILLMASTER",
+        gameTitle: room.selectedGame?.title || "Ukjent lek",
+        finishedAt: new Date().toISOString(),
+        scores: room.scores || {}
+      });
+
+      localStorage.setItem("lastGames", JSON.stringify(lastGames.slice(0, 10)));
+    }
+
+    function renderLastGames() {
+      const list = JSON.parse(localStorage.getItem("lastGames") || "[]");
+      const el = document.getElementById("lastGamesList");
+      el.innerHTML = "";
+
+      if (list.length === 0) {
+        el.innerHTML = `<p class="muted">Ingen fullførte spill lagret ennå.</p>`;
+        return;
+      }
+
+      list.forEach(game => {
+        const div = document.createElement("div");
+        div.className = "last-game";
+
+        const scores = Object.values(game.scores || {}).sort((a, b) => {
+          return ((b.total || 0) + (b.current || 0)) - ((a.total || 0) + (a.current || 0));
+        });
+
+        div.innerHTML = `
+          <strong>${escapeHtml(game.gameTitle)}</strong>
+          <p class="muted">Modus/kode: ${game.code} | ${new Date(game.finishedAt).toLocaleString("no-NO")}</p>
+          ${scores.map(s => `<div>${s.avatar || "😎"} ${escapeHtml(s.name || "Spiller")}: ${(s.total || 0) + (s.current || 0)}</div>`).join("")}
+        `;
+
+        el.appendChild(div);
+      });
+    }
+
+    async function undoLastSavedGameScore() {
+      alert("I denne enkle versjonen kan du slette totalscore med knappen under. Angring av enkeltrunde kan legges til senere.");
+    }
+
+    async function resetAllTotalScores() {
+      if (!currentRoom || currentRoom.hostId !== playerId) return;
+      if (!confirm("Slette totalscore i dette spillet?")) return;
+
+      if (currentMode === "master") {
+        Object.keys(currentRoom.scores || {}).forEach(id => {
+          currentRoom.scores[id].total = 0;
+          currentRoom.scores[id].current = 0;
+        });
+        renderPlay();
+      } else {
+        const scores = currentRoom.scores || {};
+        const updates = {};
+
+        Object.keys(scores).forEach(id => {
+          updates[`rooms/${currentRoomCode}/scores/${id}/total`] = 0;
+          updates[`rooms/${currentRoomCode}/scores/${id}/current`] = 0;
+        });
+
+        await update(ref(db), updates);
+      }
+    }
+
+    function addCustomQuestion() {
+      const text = document.getElementById("customQuestionText").value.trim();
+      const type = document.getElementById("customQuestionType").value;
+
+      if (!text) {
+        document.getElementById("customGameMessage").textContent = "Skriv inn tekst først.";
+        return;
+      }
+
+      customDraftQuestions.push({ text, type });
+      document.getElementById("customQuestionText").value = "";
+      renderCustomDraft();
+    }
+
+    function renderCustomDraft() {
+      const el = document.getElementById("customQuestionsList");
+      el.innerHTML = "";
+
+      customDraftQuestions.forEach((q, index) => {
+        const div = document.createElement("div");
+        div.className = "custom-item";
+        div.innerHTML = `
+          <strong>${index + 1}. ${escapeHtml(q.type)}</strong>
+          <p>${escapeHtml(q.text)}</p>
+          <button class="btn btn-danger" onclick="removeCustomQuestion(${index})">Slett</button>
+        `;
+        el.appendChild(div);
+      });
+    }
+
+    window.removeCustomQuestion = function(index) {
+      customDraftQuestions.splice(index, 1);
+      renderCustomDraft();
+    };
+
+    async function saveCustomGame() {
+      const title = document.getElementById("customGameName").value.trim();
+      const description = document.getElementById("customGameDescription").value.trim();
+      const msg = document.getElementById("customGameMessage");
+
+      if (!title) {
+        msg.textContent = "Gi leken et navn.";
+        return;
+      }
+
+      if (customDraftQuestions.length === 0) {
+        msg.textContent = "Legg til minst én oppgave.";
+        return;
+      }
+
+      const gameId = `custom-${crypto.randomUUID()}`;
+      const scoring = customDraftQuestions.some(q => ["votePlayer", "duel", "speed"].includes(q.type));
+
+      const game = {
+        id: gameId,
+        title,
+        description,
+        questions: customDraftQuestions,
+        custom: true,
+        scoring,
+        createdAt: Date.now()
+      };
+
+      await set(ref(db, `customGames/${ownerId}/${gameId}`), game);
+
+      customDraftQuestions = [];
+      document.getElementById("customGameName").value = "";
+      document.getElementById("customGameDescription").value = "";
+      document.getElementById("customQuestionText").value = "";
+      renderCustomDraft();
+
+      msg.textContent = "Leken er lagret.";
+    }
+
+    async function loadCustomGamesData() {
+      const snap = await get(ref(db, `customGames/${ownerId}`));
+      customGames = snap.val() || {};
+    }
+
+    async function loadCustomGames() {
+      await loadCustomGamesData();
+
+      myGamesList.innerHTML = "";
+
+      const games = Object.values(customGames);
+
+      if (games.length === 0) {
+        myGamesList.innerHTML = `<p class="muted">Du har ingen egne leker ennå.</p>`;
+        return;
+      }
+
+      games.forEach(game => {
+        const div = document.createElement("div");
+        div.className = "custom-item";
+        div.innerHTML = `
+          <strong>${escapeHtml(game.title)}</strong>
+          <p class="muted">${escapeHtml(game.description || "")}</p>
+          <p>${game.questions?.length || 0} oppgaver</p>
+          <button class="btn btn-danger" onclick="deleteCustomGame('${game.id}')">Slett</button>
+        `;
+        myGamesList.appendChild(div);
+      });
+    }
+
+    window.deleteCustomGame = async function(gameId) {
+      if (!confirm("Slette denne leken?")) return;
+      await remove(ref(db, `customGames/${ownerId}/${gameId}`));
+      loadCustomGames();
+    };
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    playerNameInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        joinAsPlayer();
+      }
+    });
+
+    joinCodeInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        joinRoomByCode();
+      }
+    });
+
+    renderAvatarGrid();
+  </script>
+</body>
+</html>
