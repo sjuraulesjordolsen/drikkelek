@@ -2,14 +2,19 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Drikkeleker</title>
 
   <style>
     :root {
       --bg:#050505;
+      --bg2:#0c0c0d;
       --card:#161616;
       --card2:#202020;
+      --panel:rgba(22,22,22,.96);
       --border:#2d2d2d;
       --text:#f5f5f5;
       --muted:#a3a3a3;
@@ -19,43 +24,88 @@
       --greenSoft:rgba(34,197,94,.14);
       --red:#ef4444;
       --shadow:0 20px 60px rgba(0,0,0,.45);
-      --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+      --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Arial,sans-serif;
     }
 
     * {
       box-sizing:border-box;
       font-family:var(--font);
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html {
+      margin:0;
+      min-height:100%;
+      background:#050505;
+      color-scheme:dark;
+      overscroll-behavior-y:auto;
     }
 
     body {
       margin:0;
+      min-height:100dvh;
       background:
-        radial-gradient(circle at top,rgba(255,122,26,.12),transparent 35%),
-        linear-gradient(180deg,#050505,#0c0c0d 45%,#050505);
+        radial-gradient(circle at top,rgba(255,122,26,.12),transparent 34%),
+        linear-gradient(180deg,#050505,#0c0c0d 46%,#050505);
+      background-color:#050505;
       color:var(--text);
-      min-height:100vh;
       font-weight:500;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:geometricPrecision;
+      overscroll-behavior-y:auto;
     }
 
-    button,input,textarea {
+    body::before {
+      content:"";
+      position:fixed;
+      inset:-180px 0 auto 0;
+      height:240px;
+      background:#050505;
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    body::after {
+      content:"";
+      position:fixed;
+      inset:auto 0 -180px 0;
+      height:240px;
+      background:#050505;
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    button,
+    input,
+    textarea {
       font-family:var(--font);
+    }
+
+    button {
+      touch-action:manipulation;
+      user-select:none;
     }
 
     .page {
       width:100%;
-      max-width:980px;
+      max-width:1100px;
+      min-height:100dvh;
       margin:0 auto;
-      padding:26px 16px 52px;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        max(14px, env(safe-area-inset-right))
+        max(42px, env(safe-area-inset-bottom))
+        max(14px, env(safe-area-inset-left));
     }
 
     .hero {
-      padding:32px 0 22px;
+      padding:clamp(18px,4vw,34px) 0 clamp(12px,3vw,24px);
     }
 
     h1 {
       margin:0;
-      font-size:clamp(46px,11vw,82px);
-      letter-spacing:-.07em;
+      font-size:clamp(42px,10vw,86px);
+      letter-spacing:-.075em;
       line-height:.92;
       font-weight:950;
     }
@@ -66,16 +116,16 @@
 
     .hero-text {
       max-width:760px;
-      margin-top:20px;
+      margin-top:18px;
       color:var(--muted);
-      font-size:clamp(17px,4vw,21px);
+      font-size:clamp(16px,3.5vw,21px);
       line-height:1.45;
       font-weight:500;
     }
 
     .screen {
       display:none;
-      animation:fadeIn .18s ease-out;
+      animation:fadeIn .16s ease-out;
     }
 
     .screen.active {
@@ -94,28 +144,30 @@
     }
 
     .panel {
-      background:rgba(22,22,22,.94);
+      background:var(--panel);
       border:1px solid var(--border);
-      border-radius:26px;
-      padding:22px;
+      border-radius:clamp(22px,4vw,30px);
+      padding:clamp(16px,3vw,24px);
       box-shadow:var(--shadow);
       margin-top:16px;
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
     }
 
     .box,
     .join-box,
     .profile-card,
     .lobby-card {
-      background:#101010;
+      background:rgba(16,16,16,.94);
       border:1px solid var(--border);
-      border-radius:20px;
+      border-radius:22px;
       padding:14px;
     }
 
     .title {
       margin:0 0 10px;
-      font-size:28px;
-      letter-spacing:-.04em;
+      font-size:clamp(24px,5vw,32px);
+      letter-spacing:-.045em;
       font-weight:950;
     }
 
@@ -123,7 +175,7 @@
     .muted {
       color:var(--muted);
       line-height:1.5;
-      font-size:15px;
+      font-size:clamp(14px,3vw,16px);
       font-weight:500;
       margin:0;
     }
@@ -172,11 +224,12 @@
       background:#0b0b0c;
       color:var(--text);
       border:1px solid var(--border);
-      border-radius:16px;
-      padding:14px;
+      border-radius:18px;
+      padding:15px 14px;
       font-size:16px;
       outline:none;
       font-weight:500;
+      min-height:48px;
     }
 
     textarea {
@@ -192,21 +245,22 @@
 
     .btn {
       border:none;
-      border-radius:16px;
-      padding:15px 16px;
+      border-radius:18px;
+      padding:14px 16px;
+      min-height:48px;
       font-weight:900;
       font-size:15px;
       cursor:pointer;
-      transition:transform .15s ease,opacity .15s ease,border-color .15s ease;
+      transition:transform .14s ease,opacity .14s ease,border-color .14s ease,background .14s ease;
       text-align:center;
     }
 
     .btn:active {
-      transform:scale(.98);
+      transform:scale(.97);
     }
 
     .btn:disabled {
-      opacity:.45;
+      opacity:.42;
       cursor:not-allowed;
     }
 
@@ -219,10 +273,6 @@
       background:#252525;
       color:var(--text);
       border:1px solid var(--border);
-    }
-
-    .btn-secondary:hover {
-      border-color:rgba(255,122,26,.55);
     }
 
     .btn-danger {
@@ -259,13 +309,16 @@
     }
 
     .back {
-      background:transparent;
+      background:rgba(16,16,16,.78);
       color:var(--muted);
       border:1px solid var(--border);
       border-radius:999px;
       padding:10px 14px;
+      min-height:42px;
       font-weight:800;
       cursor:pointer;
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
     }
 
     .back:hover {
@@ -332,15 +385,6 @@
       padding:12px;
     }
 
-    .online-player {
-      cursor:pointer;
-    }
-
-    .online-player:hover {
-      border-color:rgba(255,122,26,.55);
-      background:#191919;
-    }
-
     .online-person,
     .lobby-person,
     .result-person {
@@ -359,6 +403,20 @@
       white-space:nowrap;
     }
 
+    .online-actions {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .online-actions .btn {
+      min-height:38px;
+      padding:9px 12px;
+      border-radius:14px;
+      font-size:13px;
+    }
+
     .online-status,
     .result-score {
       color:var(--muted);
@@ -374,14 +432,14 @@
         linear-gradient(135deg,rgba(255,122,26,.08),transparent 38%),
         var(--card);
       border:1px solid var(--border);
-      border-radius:22px;
+      border-radius:24px;
       padding:20px;
       color:var(--text);
       box-shadow:var(--shadow);
       cursor:pointer;
     }
 
-    .game-card:hover {
+    .game-card:hover:not(:disabled) {
       border-color:rgba(255,122,26,.65);
       background:
         linear-gradient(135deg,rgba(255,122,26,.14),transparent 40%),
@@ -390,7 +448,7 @@
 
     .game-card h3 {
       margin:0 0 8px;
-      font-size:23px;
+      font-size:clamp(21px,4vw,25px);
       letter-spacing:-.03em;
       font-weight:950;
     }
@@ -400,6 +458,7 @@
       color:var(--muted);
       line-height:1.45;
       font-weight:500;
+      font-size:clamp(14px,3vw,16px);
     }
 
     .option-grid {
@@ -413,8 +472,9 @@
       border:1px solid var(--border);
       background:#202020;
       color:var(--text);
-      border-radius:16px;
+      border-radius:18px;
       padding:14px;
+      min-height:48px;
       cursor:pointer;
       font-weight:900;
     }
@@ -425,15 +485,28 @@
       color:var(--orange);
     }
 
+    #playScreen {
+      min-height:100dvh;
+    }
+
     .play-layout {
       display:grid;
-      grid-template-columns:1.25fr .85fr;
-      gap:16px;
-      margin-top:16px;
+      grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);
+      gap:clamp(10px,1.6vw,16px);
+      margin-top:12px;
+      min-height:auto;
     }
 
     .play-layout.no-score {
       grid-template-columns:1fr;
+    }
+
+    .play-layout > div:first-child {
+      display:grid;
+      grid-template-rows:minmax(0,1fr) auto;
+      gap:10px;
+      min-height:calc(100dvh - 245px);
+      max-height:calc(100dvh - 145px);
     }
 
     .round-card {
@@ -441,47 +514,28 @@
         radial-gradient(circle at top left,rgba(255,122,26,.18),transparent 34%),
         #101010;
       border:1px solid rgba(255,122,26,.25);
-      border-radius:28px;
-      min-height:270px;
-      padding:28px 22px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-    }
-
-    .phone-off-card {
-      min-height:55vh;
-      border-radius:28px;
-      background:
-        radial-gradient(circle at top,rgba(255,255,255,.14),transparent 35%),
-        linear-gradient(135deg,#ff7a1a,#c2410c);
-      color:#111;
+      border-radius:30px;
+      min-height:0;
+      height:100%;
+      padding:clamp(14px,2.2vw,24px);
       display:grid;
-      place-items:center;
-      text-align:center;
-      padding:28px;
-      box-shadow:var(--shadow);
-      font-weight:950;
-    }
-
-    .phone-off-card h2 {
-      margin:0;
-      line-height:1.05;
-      letter-spacing:-.06em;
-      font-size:clamp(38px,8vw,74px);
+      grid-template-rows:auto minmax(0,auto) auto auto;
+      align-content:center;
+      gap:clamp(8px,1.5vw,14px);
+      overflow:hidden;
     }
 
     .round-top {
       display:flex;
       justify-content:space-between;
       gap:10px;
-      margin-bottom:14px;
+      margin-bottom:0;
       align-items:center;
     }
 
     .round-label {
       color:var(--orange);
-      font-size:12px;
+      font-size:clamp(11px,2.5vw,13px);
       font-weight:950;
       letter-spacing:.08em;
       text-transform:uppercase;
@@ -494,27 +548,30 @@
       border:1px solid rgba(255,122,26,.28);
       border-radius:999px;
       padding:6px 10px;
-      font-size:13px;
+      font-size:clamp(12px,2.5vw,14px);
       font-weight:950;
     }
 
     .round-text {
-      font-size:clamp(24px,6vw,40px);
+      font-size:clamp(19px,4.2vw,42px);
       line-height:1.08;
-      letter-spacing:-.05em;
+      letter-spacing:-.045em;
       font-weight:950;
+      max-width:100%;
+      overflow-wrap:anywhere;
     }
 
     .winner-message {
       display:none;
-      margin-top:14px;
-      padding:14px;
+      margin-top:0;
+      padding:13px;
       border-radius:18px;
       color:#bbf7d0;
       background:var(--greenSoft);
       border:1px solid rgba(34,197,94,.35);
       font-weight:950;
       line-height:1.35;
+      font-size:clamp(14px,3vw,17px);
     }
 
     .winner-message.active {
@@ -523,32 +580,34 @@
 
     .vote-area {
       display:grid;
-      gap:10px;
-      margin-top:14px;
+      gap:clamp(8px,1.4vw,12px);
+      margin-top:0;
     }
 
     .choice-grid {
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:14px;
+      gap:clamp(8px,1.4vw,12px);
+      margin-top:0;
     }
 
     .vote-button,
     .quiz-choice {
       border:1px solid var(--border);
-      border-radius:16px;
+      border-radius:18px;
       background:#202020;
       color:#fff;
-      padding:13px;
+      padding:clamp(10px,1.8vw,16px);
       font-weight:900;
       cursor:pointer;
       text-align:left;
+      font-size:clamp(14px,2vw,18px);
+      line-height:1.14;
+      overflow-wrap:anywhere;
     }
 
     .quiz-choice {
-      min-height:88px;
-      font-size:16px;
+      min-height:clamp(58px,13vh,118px);
       display:flex;
       align-items:center;
     }
@@ -583,8 +642,21 @@
 
     .vote-button:disabled,
     .quiz-choice:disabled {
-      opacity:.65;
+      opacity:.68;
       cursor:not-allowed;
+    }
+
+    #hostControls {
+      margin-top:0;
+      position:sticky;
+      bottom:max(10px, env(safe-area-inset-bottom));
+      z-index:5;
+      background:rgba(5,5,5,.82);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:10px;
     }
 
     .scoreboard {
@@ -594,6 +666,8 @@
       padding:18px;
       box-shadow:var(--shadow);
       align-self:start;
+      max-height:calc(100dvh - 245px);
+      overflow:auto;
     }
 
     .scoreboard.hidden {
@@ -649,17 +723,94 @@
       font-weight:500;
     }
 
-    @media (max-width:760px) {
-      .play-layout,
+    .phone-off-card {
+      min-height:70dvh;
+      border-radius:30px;
+      background:
+        radial-gradient(circle at top,rgba(255,255,255,.14),transparent 35%),
+        linear-gradient(135deg,#ff7a1a,#c2410c);
+      color:#111;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      padding:28px;
+      box-shadow:var(--shadow);
+      font-weight:950;
+    }
+
+    .phone-off-card h2 {
+      margin:0;
+      line-height:1.05;
+      letter-spacing:-.06em;
+      font-size:clamp(38px,8vw,74px);
+    }
+
+    @media (max-height:760px) and (min-width:861px) {
+      .play-layout > div:first-child {
+        min-height:calc(100dvh - 225px);
+      }
+
+      .round-text {
+        font-size:clamp(18px,3.2vw,34px);
+      }
+
+      .quiz-choice {
+        min-height:clamp(50px,10vh,88px);
+      }
+
+      .round-card {
+        padding:14px 18px;
+        gap:8px;
+      }
+
+      #hostControls {
+        padding:8px;
+      }
+
+      .btn {
+        padding:12px 14px;
+        min-height:44px;
+      }
+    }
+
+    @media (max-width:860px) {
+      .play-layout {
+        grid-template-columns:1fr;
+        min-height:auto;
+      }
+
+      .play-layout > div:first-child {
+        min-height:auto;
+        max-height:none;
+      }
+
+      .round-card {
+        min-height:calc(100dvh - 250px);
+        height:auto;
+      }
+
+      .scoreboard {
+        max-height:none;
+      }
+
+      #hostControls {
+        position:sticky;
+        bottom:max(8px, env(safe-area-inset-bottom));
+      }
+    }
+
+    @media (max-width:620px) {
       .choice-grid,
       .option-grid {
         grid-template-columns:1fr;
       }
-    }
 
-    @media (max-width:560px) {
-      .page {
-        padding:20px 14px 40px;
+      .round-text {
+        font-size:clamp(21px,7vw,34px);
+      }
+
+      .quiz-choice {
+        min-height:clamp(52px,10vh,82px);
       }
 
       .input-row,
@@ -671,13 +822,22 @@
         width:100%;
       }
 
-      .panel {
-        border-radius:22px;
-        padding:18px;
-      }
-
       .avatar-grid {
         grid-template-columns:repeat(5,1fr);
+      }
+
+      .online-player {
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .online-actions {
+        width:100%;
+        justify-content:stretch;
+      }
+
+      .online-actions .btn {
+        flex:1;
       }
     }
   </style>
@@ -690,7 +850,7 @@
       <p class="hero-text">Logg inn med brukernavn, start et spill, velg lek og la kaoset begynne.</p>
     </header>
 
-    <section id="profileScreen" class="screen">
+    <section id="profileScreen" class="screen active">
       <div class="panel">
         <h2 class="title">Logg inn</h2>
         <p class="subtitle">Skriv inn brukernavn. Emoji er valgt automatisk, men du kan velge en annen hvis du vil.</p>
@@ -711,7 +871,7 @@
         <h2 class="title">Forside</h2>
         <p class="subtitle">Start et nytt spill eller bli med i et eksisterende spill.</p>
 
-        <div id="homeLobbyCard" class="lobby-card" style="display:none; margin-top:14px;">
+        <div id="homeLobbyCard" class="lobby-card" style="display:none;margin-top:14px;">
           <h2 class="title" style="font-size:22px;margin-bottom:6px;">
             Din lobby
             <span class="code-box-small" id="homeRoomCodeSmall">KODE ----</span>
@@ -722,7 +882,6 @@
 
         <div class="profile-card">
           <div class="profile-avatar" id="homeProfileAvatar">😎</div>
-
           <div>
             <div style="font-weight:950;">Brukernavn</div>
             <div class="subtitle" id="homeProfileName">Spiller</div>
@@ -749,7 +908,7 @@
 
         <div style="margin-top:22px;">
           <h2 class="title" style="font-size:22px;margin-bottom:6px;">Andre spillere</h2>
-          <p class="subtitle">Trykk på en spiller for å bli med i deres lobby.</p>
+          <p class="subtitle">Inviter spillere til din lobby eller bli med i deres lobby.</p>
           <div class="online-list" id="onlinePlayersList"></div>
         </div>
 
@@ -808,7 +967,7 @@
           <div class="lobby-players-list" id="setupPlayersList"></div>
         </div>
 
-        <div class="box" id="questionDugnadBox" style="margin-top:14px; display:none;">
+        <div class="box" id="questionDugnadBox" style="margin-top:14px;display:none;">
           <h2 class="title" style="font-size:22px;">Legg inn spørsmål anonymt</h2>
           <p class="subtitle">Alle spillere må legge inn minst 5 spørsmål. Ingen ser hvem som har lagt inn hvilke spørsmål.</p>
 
@@ -829,7 +988,7 @@
     </section>
 
     <section id="playScreen" class="screen">
-      <div class="topbar">
+      <div class="topbar" id="playTopbar">
         <button class="back" onclick="showScreen('gamesScreen')">← Spill</button>
         <button class="back" onclick="goHome()">Forside</button>
         <button class="back" onclick="showScoreboardSoFar()">Scoreboard</button>
@@ -844,7 +1003,7 @@
         <div>
           <div class="round-card">
             <div class="round-top">
-              <div class="round-label">Runde</div>
+              <div class="round-label">Spørsmål</div>
               <div class="counter" id="questionCounter">1/1</div>
             </div>
 
@@ -854,7 +1013,7 @@
           </div>
 
           <div class="buttons" id="hostControls">
-            <button class="btn btn-primary" id="nextRoundButton" onclick="hostNextRound()">Neste runde</button>
+            <button class="btn btn-primary" id="nextRoundButton" onclick="hostNextRound()">Neste spørsmål</button>
             <button class="btn btn-green" id="finishGameButton" onclick="finishGame()">Fullfør spill</button>
           </div>
         </div>
@@ -926,12 +1085,16 @@
     const hero = document.getElementById("hero");
     const avatars = ["😎", "🤠", "🤡", "🦊", "🐸", "🐵", "👽", "🤖", "🧠", "🔥"];
 
-    let playerId = crypto.randomUUID();
-    let profileName = "";
-    let profileAvatar = randomAvatar();
+    let playerId = localStorage.getItem("playerId") || crypto.randomUUID();
+    localStorage.setItem("playerId", playerId);
+
+    let profileName = localStorage.getItem("profileName") || "";
+    let profileAvatar = localStorage.getItem("profileAvatar") || randomAvatar();
     let selectedAvatar = profileAvatar;
 
-    let currentRoomCode = null;
+    let currentRoomCode = localStorage.getItem("currentRoomCode") || null;
+    let lastScreen = localStorage.getItem("lastScreen") || "profileScreen";
+
     let currentRoom = null;
     let pendingGame = null;
     let selectedQuestionCount = 20;
@@ -985,12 +1148,13 @@
     const resultsTitle = document.getElementById("resultsTitle");
     const resultsSubtitle = document.getElementById("resultsSubtitle");
     const backToLobbyFromResults = document.getElementById("backToLobbyFromResults");
+    const playTopbar = document.getElementById("playTopbar");
 
     const games = {
       cards: {
         id: "cards",
         title: "Korttrekkeren",
-        subtitle: "Styr spillet fra din telefon. Trekk regler, oppgaver og kaoskort. Én person styrer.",
+        subtitle: "Styr spillet fra din telefon. Trekk regler, oppgaver og kaoskort.",
         scoring: false,
         type: "card",
         phoneOff: true
@@ -1012,21 +1176,21 @@
       speed: {
         id: "speed",
         title: "Raskere enn resten",
-        subtitle: "Spillerne spiller fra hver sin telefon. Kahoot-stil med fire fargerike valg. Riktig svar gir poeng.",
+        subtitle: "Spillerne spiller fra hver sin telefon. Kahoot-stil med fire fargerike valg.",
         scoring: true,
         type: "quiz"
       },
       dilemma: {
         id: "dilemma",
         title: "Dilemma",
-        subtitle: "Spillerne spiller fra hver sin telefon. Flertallsvalg gir +1. Valget med færrest stemmer gir -1.",
+        subtitle: "Flertallsvalg gir +1. Valget med færrest stemmer gir -1.",
         scoring: true,
         type: "dilemma"
       },
       dugnad: {
         id: "dugnad",
         title: "Spørsmålsdugnad",
-        subtitle: "Spillerne spiller fra hver sin telefon. Alle må legge inn minst 5 anonyme spørsmål.",
+        subtitle: "Alle må legge inn minst 5 anonyme spørsmål.",
         scoring: false,
         type: "dugnad"
       }
@@ -1056,6 +1220,18 @@
       return avatars[Math.floor(Math.random() * avatars.length)];
     }
 
+    function saveState() {
+      localStorage.setItem("playerId", playerId);
+      localStorage.setItem("profileName", profileName || "");
+      localStorage.setItem("profileAvatar", profileAvatar || "");
+
+      if (currentRoomCode) {
+        localStorage.setItem("currentRoomCode", currentRoomCode);
+      } else {
+        localStorage.removeItem("currentRoomCode");
+      }
+    }
+
     function showScreen(id) {
       screens.forEach(screenId => {
         document.getElementById(screenId).classList.remove("active");
@@ -1063,6 +1239,9 @@
 
       document.getElementById(id).classList.add("active");
       hero.style.display = id === "profileScreen" || id === "homeScreen" ? "block" : "none";
+
+      localStorage.setItem("lastScreen", id);
+      lastScreen = id;
 
       window.scrollTo({
         top: 0,
@@ -1096,7 +1275,10 @@
 
         button.onclick = () => {
           selectedAvatar = avatar;
+          profileAvatar = avatar;
+          saveState();
           renderProfileAvatars();
+          updateHomeProfileCard();
         };
 
         profileAvatarGrid.appendChild(button);
@@ -1119,9 +1301,15 @@
       profileName = name;
       profileAvatar = selectedAvatar || randomAvatar();
 
+      saveState();
       updateHomeProfileCard();
       await registerOnlinePlayer();
-      showScreen("homeScreen");
+
+      if (currentRoomCode) {
+        subscribeToRoom(currentRoomCode);
+      } else {
+        showScreen("homeScreen");
+      }
     }
 
     async function updateUsernameFromHome() {
@@ -1138,6 +1326,7 @@
       }
 
       profileName = newName;
+      saveState();
 
       updateHomeProfileCard();
       await registerOnlinePlayer();
@@ -1160,7 +1349,6 @@
       }
 
       homeProfileMessage.textContent = "Brukernavn er oppdatert.";
-
       setTimeout(() => {
         homeProfileMessage.textContent = "";
       }, 1600);
@@ -1208,23 +1396,35 @@
             <span class="avatar">${player.avatar || "😎"}</span>
             <span class="online-person-name">${escapeHtml(player.name || "Spiller")}</span>
           </div>
-          <span class="online-status">${player.lobbyCode ? "I lobby" : "Online"}</span>
+
+          <div class="online-actions">
+            <button class="btn btn-secondary" onclick="event.stopPropagation(); invitePlayer('${player.id}', '${escapeJs(player.name || "Spiller")}')">Inviter</button>
+            <button class="btn btn-primary" onclick="event.stopPropagation(); joinPlayerLobby('${player.lobbyCode || ""}')">Bli med</button>
+          </div>
         `;
 
-        div.onclick = () => handleOnlinePlayerClick(player);
         onlinePlayersList.appendChild(div);
       });
     }
 
-    async function handleOnlinePlayerClick(player) {
-      if (!player.lobbyCode) {
-        alert(`${player.name} har ingen aktiv lobby akkurat nå.`);
+    window.invitePlayer = function(playerIdToInvite, playerNameToInvite) {
+      if (!currentRoomCode) {
+        alert("Start eller bli med i en lobby først. Da får du en spillkode å invitere med.");
         return;
       }
 
-      joinCodeInput.value = player.lobbyCode;
+      alert(`${playerNameToInvite} kan bli med med spillkode ${currentRoomCode}.`);
+    };
+
+    window.joinPlayerLobby = async function(lobbyCode) {
+      if (!lobbyCode) {
+        alert("Denne spilleren er ikke i en lobby akkurat nå.");
+        return;
+      }
+
+      joinCodeInput.value = lobbyCode;
       await joinRoomByCode();
-    }
+    };
 
     function randomCode() {
       return String(Math.floor(1000 + Math.random() * 9000));
@@ -1244,11 +1444,17 @@
     }
 
     async function createNewRoom() {
+      if (!profileName) {
+        showScreen("profileScreen");
+        return;
+      }
+
       homeMessage.textContent = "Oppretter spill...";
 
       try {
         const code = await generateAvailableCode();
         currentRoomCode = code;
+        saveState();
 
         await set(ref(db, `rooms/${code}`), {
           code,
@@ -1267,12 +1473,10 @@
 
         await addSelfToRoom(code);
         await registerOnlinePlayer();
-
         subscribeToRoom(code);
 
         roomCodeSmall.textContent = `KODE ${code}`;
         renderGamesList();
-
         showScreen("gamesScreen");
         homeMessage.textContent = "";
       } catch (error) {
@@ -1282,6 +1486,11 @@
     }
 
     async function joinRoomByCode() {
+      if (!profileName) {
+        showScreen("profileScreen");
+        return;
+      }
+
       const code = joinCodeInput.value.trim();
 
       if (!/^\d{4}$/.test(code)) {
@@ -1304,15 +1513,14 @@
       }
 
       currentRoomCode = code;
+      saveState();
 
       await addSelfToRoom(code);
       await registerOnlinePlayer();
 
       subscribeToRoom(code);
-
       roomCodeSmall.textContent = `KODE ${code}`;
       renderGamesList();
-
       showScreen("gamesScreen");
       joinMessage.textContent = "";
     }
@@ -1358,10 +1566,14 @@
 
         if (!currentRoom) {
           currentRoomCode = null;
+          saveState();
           registerOnlinePlayer();
           showScreen("homeScreen");
           return;
         }
+
+        currentRoomCode = code;
+        saveState();
 
         roomCodeSmall.textContent = `KODE ${currentRoom.code || "----"}`;
         homeRoomCodeSmall.textContent = `KODE ${currentRoom.code || "----"}`;
@@ -1370,8 +1582,8 @@
         renderHomeLobbyCard();
         renderSetupPlayers();
         renderDugnadStatus();
-        renderPlay();
         renderGamesList();
+        renderPlay();
 
         if (currentRoom.status === "lobby" || currentRoom.status === "setup") {
           showScreen("gamesScreen");
@@ -1450,7 +1662,6 @@
       }
 
       const confirmed = confirm("Ønsker du å forlate lobbyen? Hvis du er host, blir en annen spiller tilfeldig valgt som ny host.");
-
       if (!confirmed) return;
 
       const leavingCode = currentRoomCode;
@@ -1467,6 +1678,7 @@
 
         if (remainingPlayers.length) {
           const newHostId = remainingPlayers[Math.floor(Math.random() * remainingPlayers.length)];
+
           await update(ref(db, `rooms/${leavingCode}`), {
             hostId: newHostId,
             updatedAt: Date.now()
@@ -1479,6 +1691,7 @@
       currentRoom = null;
       currentRoomCode = null;
       pendingGame = null;
+      saveState();
 
       await registerOnlinePlayer();
 
@@ -1499,7 +1712,6 @@
       }
 
       const confirmed = confirm("Ønsker du å avslutte lobbyen og vise totalt scoreboard for alle lekene?");
-
       if (!confirmed) return;
 
       await addCurrentScoresToLobbyTotals();
@@ -1521,7 +1733,6 @@
       if (!currentRoom) return;
 
       const totals = getPreviewTotals();
-
       scoreboardOrigin = "preview";
 
       renderScoreboardResult(
@@ -1540,7 +1751,7 @@
 
       hostHint.textContent = isHost
         ? "Du er lobby master. Du kan velge spill og starte lek."
-        : "Du er med i lobbyen. Lobby master velger spill. Du kan gi input når et spill spilles.";
+        : "Du er med i lobbyen. Lobby master velger spill. Du kan kun gi input når et spill spilles.";
 
       Object.values(games).forEach(game => {
         const button = document.createElement("button");
@@ -1566,7 +1777,6 @@
       }
 
       pendingGame = games[gameId];
-
       setupGameTitle.textContent = pendingGame.title;
       setupGameDesc.textContent = pendingGame.subtitle;
 
@@ -1613,9 +1823,9 @@
       difficultyOptions.innerHTML = "";
 
       [
-        { id: "easy", label: "Lett" },
-        { id: "medium", label: "Middels" },
-        { id: "hard", label: "Vanskelig" }
+        { id:"easy", label:"Lett" },
+        { id:"medium", label:"Middels" },
+        { id:"hard", label:"Vanskelig" }
       ].forEach(diff => {
         const button = document.createElement("button");
         button.className = "option-btn";
@@ -1682,6 +1892,7 @@
             <span class="avatar">${player.avatar || "😎"}</span>
             <span class="lobby-person-name">${escapeHtml(player.name || "Spiller")}</span>
           </div>
+
           <span class="online-status">${count}/5 spørsmål</span>
         `;
 
@@ -1773,21 +1984,21 @@
 
         if (count < 5) {
           return {
-            ok: false,
-            message: `${player.name} må legge inn minst 5 spørsmål.`
+            ok:false,
+            message:`${player.name} må legge inn minst 5 spørsmål.`
           };
         }
       }
 
-      return { ok: true };
+      return { ok:true };
     }
 
     function buildDugnadQuestions() {
       const allQuestions = Object.values(currentRoom.dugnadQuestions || {});
 
       return allQuestions.map(question => ({
-        type: "plain",
-        text: question.text
+        type:"plain",
+        text:question.text
       }));
     }
 
@@ -1811,7 +2022,7 @@
           seen.add(key);
           unique.push({
             ...question,
-            text: displayText
+            text:displayText
           });
         }
       });
@@ -1828,7 +2039,7 @@
       return generateWhoQuestions(difficulty);
     }
 
-    function generateWhoQuestions(difficulty) {
+    function generateWhoQuestions() {
       const actions = [
         "overlevd lengst uten mobilen sin",
         "kommet sist til en avtale",
@@ -1892,8 +2103,8 @@
       prefixes.forEach(prefix => {
         actions.forEach(action => {
           out.push({
-            type: "votePlayer",
-            text: `${prefix} ${action}?`
+            type:"votePlayer",
+            text:`${prefix} ${action}?`
           });
         });
       });
@@ -1901,7 +2112,7 @@
       return out.slice(0, 100);
     }
 
-    function generateSecretQuestions(difficulty) {
+    function generateSecretQuestions() {
       const actions = [
         "Få noen til å gi deg en high-five.",
         "Få noen til å si ordet «pizza».",
@@ -1959,22 +2170,22 @@
 
       actions.forEach(action => {
         out.push({
-          type: "secret",
-          text: action
+          type:"secret",
+          text:action
         });
       });
 
       actions.forEach(action => {
         out.push({
-          type: "secret",
-          text: action.replace(".", " uten at noen skjønner hvorfor.")
+          type:"secret",
+          text:action.replace(".", " uten at noen skjønner hvorfor.")
         });
       });
 
       return out.slice(0, 100);
     }
 
-    function generateQuizQuestions(difficulty) {
+    function generateQuizQuestions() {
       const base = [
         ["Hva er hovedstaden i Norge?", ["Bergen", "Trondheim", "Oslo", "Stavanger"], 2],
         ["Hva er hovedstaden i Sverige?", ["København", "Stockholm", "Helsinki", "Reykjavik"], 1],
@@ -2011,10 +2222,10 @@
       variants.forEach(prefix => {
         base.forEach(q => {
           out.push({
-            type: "quiz",
-            text: `${prefix} ${q[0]}`,
-            choices: [...q[1]],
-            correct: q[2]
+            type:"quiz",
+            text:`${prefix} ${q[0]}`,
+            choices:[...q[1]],
+            correct:q[2]
           });
         });
       });
@@ -2022,7 +2233,7 @@
       return out.slice(0, 100);
     }
 
-    function generateDilemmaQuestions(difficulty) {
+    function generateDilemmaQuestions() {
       const pairs = [
         ["Alltid komme ti minutter for sent", "Alltid komme én time for tidlig"],
         ["Aldri bruke sosiale medier igjen", "Aldri se film igjen"],
@@ -2066,14 +2277,14 @@
         ["Aldri mer internett", "Aldri mer TV"]
       ];
 
-      return pairs.slice(0, 100).map(choices => ({
-        type: "dilemma",
-        text: "Hva velger du?",
+      return pairs.map(choices => ({
+        type:"dilemma",
+        text:"Hva velger du?",
         choices
       }));
     }
 
-    function generateCardQuestions(difficulty) {
+    function generateCardQuestions() {
       const tasks = [
         "Lag en regel som gjelder de neste tre rundene.",
         "Velg en spiller som må fortelle en fun fact.",
@@ -2117,8 +2328,8 @@
         "Velg en spiller som må lage en toast."
       ];
 
-      return tasks.slice(0, 100).map(text => ({
-        type: "card",
+      return tasks.map(text => ({
+        type:"card",
         text
       }));
     }
@@ -2134,11 +2345,11 @@
       const previousDrawnPlayerIds = currentRoom.currentRound?.drawnPlayerIds || [];
 
       await update(ref(db, `rooms/${currentRoomCode}`), {
-        currentIndex: nextIndex,
-        currentRound: makeRound(nextQuestion, currentRoom.players || {}, previousDrawnPlayerIds),
-        votes: {},
-        roundAwarded: false,
-        updatedAt: Date.now()
+        currentIndex:nextIndex,
+        currentRound:makeRound(nextQuestion, currentRoom.players || {}, previousDrawnPlayerIds),
+        votes:{},
+        roundAwarded:false,
+        updatedAt:Date.now()
       });
     }
 
@@ -2146,13 +2357,13 @@
       const players = Object.values(playersObj);
 
       const round = {
-        id: crypto.randomUUID(),
-        text: cleanQuestionText(question.text),
-        type: question.type,
-        choices: question.choices || null,
-        correct: typeof question.correct === "number" ? question.correct : null,
-        createdAt: Date.now(),
-        drawnPlayerIds: []
+        id:crypto.randomUUID(),
+        text:cleanQuestionText(question.text),
+        type:question.type,
+        choices:question.choices || null,
+        correct:typeof question.correct === "number" ? question.correct : null,
+        createdAt:Date.now(),
+        drawnPlayerIds:[]
       };
 
       function eligible(count = 1) {
@@ -2171,9 +2382,9 @@
 
         if (chosen) {
           round.target = {
-            id: chosen.id,
-            name: chosen.name,
-            avatar: chosen.avatar
+            id:chosen.id,
+            name:chosen.name,
+            avatar:chosen.avatar
           };
 
           round.drawnPlayerIds = [chosen.id];
@@ -2193,12 +2404,15 @@
       const currentIndex = currentRoom.currentIndex || 0;
       const totalQuestions = game.questions.length;
       const isLastQuestion = currentIndex === totalQuestions - 1;
+      const isHost = currentRoom.hostId === playerId;
 
       currentGameTitle.textContent = game.title;
       currentGameDesc.textContent = game.subtitle || "";
       questionCounter.textContent = `${currentIndex + 1}/${totalQuestions}`;
 
-      hostControls.style.display = currentRoom.hostId === playerId ? "grid" : "none";
+      playTopbar.style.display = isHost ? "flex" : "none";
+      hostControls.style.display = isHost ? "grid" : "none";
+
       nextRoundButton.style.display = isLastQuestion ? "none" : "block";
       finishGameButton.style.display = isLastQuestion ? "block" : "none";
 
@@ -2227,6 +2441,9 @@
       const myVote = votes[playerId];
       const already = !!myVote;
 
+      if (round.type === "plain") return;
+      if (round.type === "secret" || round.type === "card") return;
+
       if (round.type === "votePlayer") {
         Object.values(playersObj).forEach(player => addVoteButton(player, myVote, already));
       }
@@ -2234,9 +2451,9 @@
       if (round.type === "dilemma") {
         (round.choices || []).forEach((choice, index) => {
           addVoteButton({
-            id: String(index),
-            name: choice,
-            avatar: "🔸"
+            id:String(index),
+            name:choice,
+            avatar:"🔸"
           }, myVote, already);
         });
       }
@@ -2251,9 +2468,7 @@
           const button = document.createElement("button");
           button.className = `quiz-choice ${colorClasses[index] || "quiz-blue"}`;
 
-          if (myVote === String(index)) {
-            button.classList.add("selected");
-          }
+          if (myVote === String(index)) button.classList.add("selected");
 
           button.disabled = already;
           button.textContent = `${choice} (${countVotesFor(String(index))})`;
@@ -2270,9 +2485,7 @@
       const button = document.createElement("button");
       button.className = "vote-button";
 
-      if (myVote === item.id) {
-        button.classList.add("selected");
-      }
+      if (myVote === item.id) button.classList.add("selected");
 
       button.disabled = already;
       button.innerHTML = `${item.avatar} ${escapeHtml(item.name)} - ${countVotesFor(item.id)} stemmer`;
@@ -2309,12 +2522,12 @@
       });
 
       if (round.type === "votePlayer") {
-        const winnerId = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+        const winnerId = Object.keys(counts).sort((a,b) => counts[b] - counts[a])[0];
         const winner = players.find(player => player.id === winnerId);
 
         if (!winner) return;
 
-        winnerMessage.textContent = `${winner.name} vant runden med ${counts[winnerId]} stemmer!`;
+        winnerMessage.textContent = `${winner.name} vant spørsmålet med ${counts[winnerId]} stemmer!`;
         winnerMessage.classList.add("active");
         return;
       }
@@ -2370,7 +2583,7 @@
       });
 
       if (round.type === "votePlayer") {
-        const winnerId = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+        const winnerId = Object.keys(counts).sort((a,b) => counts[b] - counts[a])[0];
 
         if (winnerId) {
           await changeScore(winnerId, 1);
@@ -2400,7 +2613,7 @@
       }
 
       await update(ref(db, `rooms/${currentRoomCode}`), {
-        roundAwarded: true
+        roundAwarded:true
       });
     }
 
@@ -2412,10 +2625,10 @@
       const old = snapshot.val() || {};
 
       await update(scoreRef, {
-        current: (old.current || 0) + amount,
-        total: old.total || 0,
-        name: old.name || currentRoom.players?.[targetId]?.name || "Spiller",
-        avatar: old.avatar || currentRoom.players?.[targetId]?.avatar || "😎"
+        current:(old.current || 0) + amount,
+        total:old.total || 0,
+        name:old.name || currentRoom.players?.[targetId]?.name || "Spiller",
+        avatar:old.avatar || currentRoom.players?.[targetId]?.avatar || "😎"
       });
     }
 
@@ -2425,7 +2638,7 @@
       scoreList.innerHTML = "";
 
       Object.entries(scoresObj || {})
-        .sort((a, b) => {
+        .sort((a,b) => {
           const scoreA = (a[1].total || 0) + (a[1].current || 0);
           const scoreB = (b[1].total || 0) + (b[1].current || 0);
           return scoreB - scoreA;
@@ -2460,9 +2673,9 @@
         const old = totals[id] || {};
 
         totals[id] = {
-          name: score.name || old.name || "Spiller",
-          avatar: score.avatar || old.avatar || "😎",
-          total: (old.total || 0) + (score.current || 0)
+          name:score.name || old.name || "Spiller",
+          avatar:score.avatar || old.avatar || "😎",
+          total:(old.total || 0) + (score.current || 0)
         };
       });
 
@@ -2480,9 +2693,9 @@
         const existing = lobbyTotals[id] || {};
 
         updates[`rooms/${currentRoomCode}/lobbyTotals/${id}`] = {
-          name: score.name || existing.name || "Spiller",
-          avatar: score.avatar || existing.avatar || "😎",
-          total: (existing.total || 0) + (score.current || 0)
+          name:score.name || existing.name || "Spiller",
+          avatar:score.avatar || existing.avatar || "😎",
+          total:(existing.total || 0) + (score.current || 0)
         };
 
         updates[`rooms/${currentRoomCode}/scores/${id}/total`] = (score.total || 0) + (score.current || 0);
@@ -2504,17 +2717,22 @@
       const totals = snapshot.val() || {};
 
       scoreboardOrigin = "finishedGame";
-      renderScoreboardResult(totals, "Totalt scoreboard", "Spillet er fullført. Dette er totalscoren i lobbyen så langt.");
+
+      renderScoreboardResult(
+        totals,
+        "Totalt scoreboard",
+        "Spillet er fullført. Dette er totalscoren i lobbyen så langt."
+      );
 
       await update(ref(db, `rooms/${currentRoomCode}`), {
-        status: "lobby",
-        selectedGameId: null,
-        selectedGame: null,
-        currentIndex: 0,
-        currentRound: null,
-        votes: {},
-        roundAwarded: false,
-        updatedAt: Date.now()
+        status:"lobby",
+        selectedGameId:null,
+        selectedGame:null,
+        currentIndex:0,
+        currentRound:null,
+        votes:{},
+        roundAwarded:false,
+        updatedAt:Date.now()
       });
 
       showScreen("resultsScreen");
@@ -2528,7 +2746,7 @@
       totalResultsList.innerHTML = "";
 
       const list = Object.entries(resultsObj || {})
-        .sort((a, b) => (b[1].total || 0) - (a[1].total || 0));
+        .sort((a,b) => (b[1].total || 0) - (a[1].total || 0));
 
       if (!list.length) {
         totalResultsList.innerHTML = '<p class="muted">Ingen score registrert ennå.</p>';
@@ -2573,6 +2791,13 @@
         .replaceAll("'", "&#039;");
     }
 
+    function escapeJs(text) {
+      return String(text)
+        .replaceAll("\\", "\\\\")
+        .replaceAll("'", "\\'")
+        .replaceAll('"', '\\"');
+    }
+
     profileNameInput.addEventListener("keydown", event => {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -2594,11 +2819,42 @@
       }
     });
 
-    function init() {
-      selectedAvatar = profileAvatar;
-      renderProfileAvatars();
-      subscribeOnlinePlayers();
-      showScreen("profileScreen");
+    async function init() {
+      try {
+        selectedAvatar = profileAvatar;
+        renderProfileAvatars();
+        updateHomeProfileCard();
+
+        if (!profileName) {
+          showScreen("profileScreen");
+        } else {
+          profileNameInput.value = profileName;
+          showScreen("homeScreen");
+        }
+
+        subscribeOnlinePlayers();
+
+        if (!profileName) return;
+
+        await registerOnlinePlayer();
+
+        if (currentRoomCode) {
+          const roomSnapshot = await get(ref(db, `rooms/${currentRoomCode}`));
+
+          if (roomSnapshot.exists()) {
+            subscribeToRoom(currentRoomCode);
+            return;
+          }
+
+          currentRoomCode = null;
+          saveState();
+        }
+
+        showScreen(lastScreen && lastScreen !== "profileScreen" ? lastScreen : "homeScreen");
+      } catch (error) {
+        console.error("Init-feil:", error);
+        showScreen(profileName ? "homeScreen" : "profileScreen");
+      }
     }
 
     init();
